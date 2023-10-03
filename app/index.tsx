@@ -2,17 +2,20 @@ import { SafeAreaView, Text, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import styles from '../global/styles';
 import { serverlessTest } from '../services/userService';
+import NavBar from '../components/navBar';
+import Header from '../components/header';
+import LandingPage from '../pages/home';
 
 const Home = () => {
     const router = useRouter();
-
-    return (
-        <SafeAreaView style={styles.mainTheme}>
-            <Text>Home</Text>
+        {/* <Text>Home</Text>
             <TouchableOpacity onPress={() => serverlessTest()}>
                 <Image source={require('../assets/searchIcon.png')}/>
             </TouchableOpacity>  
-        </SafeAreaView>
+            <NavBar></NavBar>
+            <Header></Header> */}
+    return (
+        <LandingPage></LandingPage>
     )
 }
 
