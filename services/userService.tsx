@@ -6,22 +6,15 @@ const endpoint = {
     getUserById: 'getUserById',
 }
 
-//Pre-API testing
-import axios from 'axios';
-const serverlessTest = async () => {
-    try {
-        const response = await axios.get(`https://www.cloudflare.com/cdn-cgi/trace`);
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+interface userData {
+    success: Boolean,
+    message: String,
 }
 
 //Post-API testing
 const helloWorld = async () => {
     try {
-        const response = await apiClient.get(`/${userController}/${endpoint.test}`);
+        const response: AxiosResponse<userData> = await apiClient.get<userData>(`/helloworld`);
         return response.data;
     } catch (error) {
         throw error;
@@ -38,4 +31,4 @@ const getUserById = async () => {
     }
 }
 
-export { serverlessTest, helloWorld, getUserById };
+export { userData, helloWorld, getUserById };
