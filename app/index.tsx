@@ -1,21 +1,27 @@
-import { SafeAreaView, Text, TouchableOpacity, Image } from 'react-native';
-import { useRouter } from 'expo-router';
-import styles from '../global/styles';
-import { serverlessTest } from '../services/userService';
-import NavBar from '../components/navBar';
-import Header from '../components/header';
-import LandingPage from '../pages/home';
+import { View } from "react-native";
+import { Redirect } from 'expo-router';
+import { useEffect, useState } from 'react';
+import Login from "./(auth)/login";
 
-const Home = () => {
-    const router = useRouter();
-        {/* <Text>Home</Text>
-            <TouchableOpacity onPress={() => serverlessTest()}>
-                <Image source={require('../assets/searchIcon.png')}/>
-            </TouchableOpacity>  
-            <NavBar></NavBar>
-            <Header></Header> */}
+const Home: React.FC = () => {
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [page, setPage] = useState(<Login />);
+
+    useEffect(() => {
+        switch (loggedIn) {
+            case true:
+                setPage(<Redirect href={'/pantry'}/>)
+            case false:
+                setPage(<Login />)
+            default:
+                setPage(<Login />) //TODO: Replace with loading component
+        }
+    }, [loggedIn]);
+
     return (
-        <LandingPage></LandingPage>
+        <View>
+            {page}
+        </View>
     )
 }
 
