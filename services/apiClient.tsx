@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: 'https://s41b0bj9-8080.usw3.devtunnels.ms/api',

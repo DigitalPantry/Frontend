@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Redirect } from 'expo-router';
 import { useEffect, useState } from 'react';
-import Login from "./(auth)/login";
+import Login from "./login";
 
 const Home: React.FC = () => {
     const [loggedIn, setLoggedIn] = useState(false);
