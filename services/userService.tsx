@@ -5,6 +5,7 @@ const userController = 'userController';
 const endpoint = {
     test: 'test',
     getUserById: 'getUserById',
+    loginUser: 'loginUser'
 }
 
 //Post-API testing
@@ -18,7 +19,24 @@ const helloWorld = async () => {
 }
 
 const loginUser = async (email: string, password: string) => {
-    return { user: { firstName: 'Logan', lastName: 'Ellsworth', email: 'lellswo2@asu.edu', password: 'pass123' }, success: true, message: '' };
+
+    try {
+        const body = {
+            "email": email,
+            "password": password
+        }
+
+        const response = await apiClient.post(`/${userController}/${endpoint.loginUser}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+
+        return response.data
+
+    } catch (error) {
+        throw error
+    }
 }
 
 const logoutUser = async () => {
