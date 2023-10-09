@@ -7,42 +7,65 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    footerButton: {
+    modal: {
+        width: '90%',
+        backgroundColor: colors.primary,
+        borderRadius: 5,
+        alignSelf: 'center',
         marginTop: 20,
-        width: 60,
-        height: 60,
-        backgroundColor: colors.seconday,
-        borderRadius: 30
+        padding: 20,
+    },
+    modalIcon: {
+        alignSelf: 'center',
+        marginTop: 10,
+        marginBottom: 10,
     },
     textInput: {
         width: '60%',
         height: 40,
         borderRadius: 20,
         backgroundColor: colors.seconday,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginTop: '5%',
+        paddingLeft: 10,
+        shadowColor: 'black',
+        shadowRadius: 1,
+        shadowOpacity: .5,
+        shadowOffset: {width: 0, height: 1}
     },
-    button: {
-        width: '50%',
+    link: {
+        alignSelf: 'center',
+        marginTop: '2%',
+        textDecorationLine: 'underline'
+    },
+    line: {
+        backgroundColor: colors.seconday,
+        height: 1
+    },
+    headerText: {
+        fontWeight: 'bold',
+        fontSize: 24,
+        alignSelf: 'center',
+    },
+    errorText: {
+        color: 'red',
+        fontWeight: 'bold',
+        alignSelf: 'center',
+    },
+    errorField: {
+        width: '60%',
         height: 40,
         borderRadius: 20,
-        backgroundColor: colors.primary,
-        alignSelf: 'center'
-    },
-    header: {
-        backgroundColor: colors.primary,
-        borderBottomWidth: 0,
-        shadowColor: colors.primary,
-        shadowOpacity: 1,
-        shadowRadius: 3,
-    },
-    footer: {
-        backgroundColor: colors.primary,
-        height: '12%',
-        shadowRadius: 3,
-        shadowOpacity: 1,
-        borderTopWidth: 0,
-        shadowColor: colors.primary
-    },
-})
+        backgroundColor: colors.seconday,
+        alignSelf: 'center',
+        marginTop: '5%',
+        paddingLeft: 10,
+        borderColor: 'red',
+        borderWidth: 1,
+        shadowColor: 'red',
+        shadowRadius: 5,
+        shadowOpacity: .4,
+    }
+});
 
 export default styles;
