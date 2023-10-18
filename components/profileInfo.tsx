@@ -1,5 +1,5 @@
 import styles from "../global/styles";
-import { View, Image, Text, Pressable, StyleSheet, TextInput } from "react-native";
+import { View, Image, Text, Pressable, TextInput } from "react-native";
 import { User } from "../models/userModels";
 import Row from "./Row";
 import Button from "./Button";
@@ -29,7 +29,6 @@ const profileInfo: React.FC<Props> = ({ user }) => {
     //Enables profile editing
     const handleEdit = () => {
         setEdit(!edit);
-        console.log("ENTER_EDIT");
     }
 
     //Clear error on field change

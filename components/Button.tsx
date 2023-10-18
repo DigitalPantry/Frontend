@@ -5,48 +5,84 @@ interface Props {
     title?: string,
     onPress: Function,
     light?: boolean,
+    size?: string,
     buttonStyle?: Object,
     textStyle?: Object,
 };
 
-const Button: React.FC<Props> = ({ title, onPress, light, buttonStyle, textStyle }) => {
+const Button: React.FC<Props> = ({ title, onPress, light, size, buttonStyle, textStyle }) => {
+    const finalStyle = () => {
+        let style: Object = {};
+        if (buttonStyle) {
+            return buttonStyle;
+        }
+        if (light) {
+            style = {
+                ...style,
+                ...localStyles.lightButton,
+            }
+        } else {
+            style = {
+                ...style,
+                ...localStyles.darkButton,
+            }
+        }
+        if (size == 'small') {
+            style = {
+                ...style,
+                ...localStyles.smallButton,
+            }
+        } else {
+            style = {
+                ...style,
+                ...localStyles.largeButton,
+            }
+        }
+        return style;
+    }
+
     return (
-        <Pressable style={buttonStyle || (light ? buttonStyles.lightButton : buttonStyles.darkButton)} onPress={() => onPress()}>
-            <Text style={textStyle || buttonStyles.buttonText}>{title}</Text>
+        <Pressable style={finalStyle} onPress={() => onPress()}>
+            <Text style={textStyle || localStyles.buttonText}>{title}</Text>
         </Pressable>
     );
 };
 
-const buttonStyles = StyleSheet.create({
+const localStyles = StyleSheet.create({
     lightButton: {
-        width: '50%',
-        height: 40,
         borderRadius: 20,
         backgroundColor: colors.seconday,
         alignSelf: 'center',
-        marginTop: '8%',
+        justifyContent: 'center',
         shadowColor: 'black',
         shadowRadius: 1,
         shadowOpacity: .5,
         shadowOffset: {width: 0, height: 1}
     },
     darkButton: {
-        width: '50%',
-        height: 40,
-        borderRadius: 20,
         backgroundColor: colors.primary,
         alignSelf: 'center',
-        marginTop: '8%',
         shadowColor: 'black',
+        justifyContent: 'center',
         shadowRadius: 1,
         shadowOpacity: .5,
-        shadowOffset: {width: 0, height: 1}
+        shadowOffset: {width: 0, height: 1},
+    },
+    largeButton: {
+        marginTop: '4%',
+        height: 40,
+        width: '50%',
+        borderRadius: 20,
+    },
+    smallButton: {
+        height: 30,
+        width: 30,
+        borderRadius: 30,
     },
     buttonText: {
         alignSelf: 'center',
         fontWeight: 'bold',
         fontSize: 16,
-        marginTop: 10,
     },
 });
 
