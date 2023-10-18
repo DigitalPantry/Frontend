@@ -11,16 +11,16 @@ interface RowProps {
 const Row: React.FC<RowProps> = ({ header, data, divider }) => {
   return (
     <>
-      <View style={rowStyles.rowView}>
-        <Text style={rowStyles.rowHeader}>{header}</Text>
-        <Text style={rowStyles.rowData}>{data}</Text>
+      <View style={localStyles.rowView}>
+        <Text style={localStyles.rowHeader}>{header}</Text>
+        <Text style={localStyles.rowData}>{data}</Text>
       </View>
       {divider && <View style={styles.line} />}
     </>
   );
 };
 
-const rowStyles = StyleSheet.create({
+const localStyles = StyleSheet.create({
   rowView: {
     justifyContent: 'space-between',
     alignItems: 'baseline',

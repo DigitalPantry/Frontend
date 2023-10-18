@@ -65,6 +65,10 @@ const styles = StyleSheet.create({
         shadowColor: 'red',
         shadowRadius: 5,
         shadowOpacity: .4,
+    },
+    popModal: {
+        flex: 1,
+        backgroundColor: colors.background,
     }
 });
 

@@ -56,27 +56,27 @@ const Login: React.FC = () => {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <ScrollView style={styles.background}>
-                    <Image source={require('../assets/DigitalPantryLogo.png')} style={{ height: 356, width: 219, alignSelf: "center", marginTop: '25%' }}></Image>
-                    <TextInput
-                        autoComplete="email"
-                        style={errors.email ? styles.errorField : styles.textInput}
-                        placeholder="Email"
-                        onChangeText={onChangeEmail}
-                        value={email}
-                        onSubmitEditing={() => passwordField.current?.focus()} />
-                    <TextInput
-                        ref={passwordField}
-                        autoComplete="current-password"
-                        style={errors.password ? styles.errorField : styles.textInput}
-                        placeholder="Password"
-                        onChangeText={onChangePassword}
-                        value={password}
-                        onSubmitEditing={login} />
-                    {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
-                    <Button title="Login" onPress={() => login()} />
-                    <Link href='/signup' style={styles.link}>New? Register here.</Link>
-                </ScrollView>
+            <ScrollView style={styles.background}>
+                <Image source={require('../assets/DigitalPantryLogo.png')} style={{ height: 356, width: 219, alignSelf: "center", marginTop: '25%' }}></Image>
+                <TextInput
+                    autoComplete="email"
+                    style={errors.email ? styles.errorField : styles.textInput}
+                    placeholder="Email"
+                    onChangeText={onChangeEmail}
+                    value={email}
+                    onSubmitEditing={() => passwordField.current?.focus()} />
+                <TextInput
+                    ref={passwordField}
+                    autoComplete="current-password"
+                    style={errors.password ? styles.errorField : styles.textInput}
+                    placeholder="Password"
+                    onChangeText={onChangePassword}
+                    value={password}
+                    onSubmitEditing={login} />
+                {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
+                <Button title="Login" onPress={() => login()} />
+                <Link href='/signup' style={styles.link}>New? Register here.</Link>
+            </ScrollView>
         </TouchableWithoutFeedback>
     )
 }
