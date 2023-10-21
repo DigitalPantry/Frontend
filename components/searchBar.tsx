@@ -16,6 +16,7 @@ const SearchBarFilter: React.FC = () => {
     const handleModal = () => setModalVisible(() => !isModalVisible);
     
     const handleSearch = () => {
+        handleModal()
         console.log('Search API Call');
     }
 
