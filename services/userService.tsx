@@ -1,36 +1,14 @@
-import { AxiosResponse } from 'axios';
+import { User } from '../models/userModels';
 import apiClient from './apiClient';
 
-const userController = 'userController';
-const endpoint = {
-    test: 'test',
-    getUserById: 'getUserById',
-    loginUser: 'loginUser'
-}
-
-//Post-API testing
-const helloWorld = async () => {
-    try {
-        const response: AxiosResponse = await apiClient.get(`/helloworld`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 const loginUser = async (email: string, password: string) => {
-
     try {
         const body = {
             "email": email,
             "password": password
         }
 
-        const response = await apiClient.post(`/${userController}/${endpoint.loginUser}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
-        });
+        const response = await apiClient.post(`/login`, body);
 
         return response.data
 
@@ -39,22 +17,30 @@ const loginUser = async (email: string, password: string) => {
     }
 }
 
-const logoutUser = async () => {
-    return { success: true, message: '' };
+const logoutUser = async () => { //Not needed until/if add JWT sessions db
+    return { success: true, message: 'LOGOUT-API-DUMMY' };
 }
 
-const registerUser = async (firstName: string, lastName: string, email: string, password: string) => {
-    return { user: {  }, success: true, message: '' };
-}
-
-//FUTURE USE EXAMPLE
-const getUserById = async () => {
+const registerUser = async (user: User) => {
     try {
-        const response = await apiClient.get(`/${userController}/${endpoint.getUserById}`);
-        return response.data;
+        const response = await apiClient.post(`/users`, user);
+
+        return response.data
+
     } catch (error) {
-        throw error;
+        throw error
     }
 }
 
-export { helloWorld, getUserById, loginUser, logoutUser, registerUser };
+const updateUser = async (user: User) => {
+    try {
+        const response = await apiClient.post(`/users/UpdateUser`, user);
+
+        return response.data
+
+    } catch (error) {
+        throw error
+    }
+}
+
+export { loginUser, logoutUser, registerUser, updateUser };
