@@ -15,11 +15,12 @@ interface RegisterResponse {
 };
 
 interface User {
-    id: number,
+    id?: number,
     first_name: string,
     last_name: string,
     email?: string,
     password?: string,
+    household_id?: number,
 }
 
 export { LogoutResponse, LoginResponse, RegisterResponse, User };

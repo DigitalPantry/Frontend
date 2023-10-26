@@ -4,6 +4,8 @@ import { User } from "../models/userModels";
 import Row from "./Row";
 import Button from "./Button";
 import { useState, useRef, useEffect } from "react";
+import { updateUser } from "../services/userService";
+import { useSession } from "../app/context/auth";
 
 interface Props {
     user: User,
@@ -16,11 +18,12 @@ interface Errors {
 };
 
 const profileInfo: React.FC<Props> = ({ user }) => {
+    const { login } = useSession();
     const [edit, setEdit] = useState<boolean>(false);
     const [first_name, onChangeFirstName] = useState<User["first_name"]>(user.first_name);
     const [last_name, onChangeLastName] = useState<User["last_name"]>(user.last_name);
     const [email, onChangeEmail] = useState<User["email"]>(user.email);
-    const [password, onChangePassword] = useState<User["password"]>(user.password);
+    const [password, onChangePassword] = useState<User["password"]>();
     const [errors, setErrors] = useState<Errors>({ first: false, last: false, email: false, password: false });
     const lastField = useRef<TextInput>(null);
     const emailField = useRef<TextInput>(null);
@@ -58,14 +61,15 @@ const profileInfo: React.FC<Props> = ({ user }) => {
         if (!first_name || first_name.length > 100) {
             setErrors((prevErrors) => ({ ...prevErrors, first: true }));
         }
-        return !hasErrors();
+        return hasErrors();
     }
 
     //Process data
-    const saveUser = () => {
+    const saveUser = async () => {
         //LOCALTESTING disabled
-        // if (validate()) { return; }
-        console.log(`EDITUSER-API-CALL - ${first_name} ${last_name} ${email} ${password}`);
+        if (validate()) { return; }
+        await updateUser({ id: user.id, first_name, last_name, email, password })
+        await login(email || "", password || "");
         setEdit(false);
     };
 
@@ -76,7 +80,6 @@ const profileInfo: React.FC<Props> = ({ user }) => {
                 <Row header="First Name:" data={user.first_name} divider={true} />
                 <Row header="Last Name:" data={user.last_name} divider={true} />
                 <Row header="Email:" data={user.email} divider={true} />
-                <Row header="Password:" data={user.password} divider={false} />
                 <Button title="Edit" onPress={handleEdit} light={true} />
             </> : <>
                 <TextInput

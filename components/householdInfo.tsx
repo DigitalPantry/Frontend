@@ -35,7 +35,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
                 <Text style={{ fontSize: 16 }}>{childUser.first_name} {childUser.last_name} {me ? "(Me)" : null}</Text>
                 {!me && <Button
                     title="x"
-                    onPress={() => removeMember(childUser.id)}
+                    onPress={() => removeMember(childUser.id || -1)}
                     size={"small"} />}
             </View>
         )
@@ -44,7 +44,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
     return (
         <View style={styles.modal}>
             <Image source={require('../assets/HouseIcon.png')} style={styles.modalIcon} />
-            {household.users.map(childUser => householdMemberRow({ user, childUser }))}
+            {household?.users?.map(childUser => householdMemberRow({ user, childUser }))}
             {showAddMember && <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingRight: 9 }}>
                 <TextInput
                     style={[styles.textInput, localStyles.userInput]}

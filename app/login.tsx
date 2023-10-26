@@ -3,7 +3,7 @@ import { ScrollView, TextInput, Image, Text, TouchableWithoutFeedback, Keyboard,
 import { useRouter, Link } from 'expo-router';
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/Button";
-// import { useSession } from "./context/auth";
+import { useSession } from "./context/auth";
 
 interface Errors {
     email: boolean,
@@ -11,7 +11,7 @@ interface Errors {
 }
 
 const Login: React.FC = () => {
-    // const { login } = useSession();
+    const { login } = useSession();
     const router = useRouter();
     const [email, onChangeEmail] = useState<string>("");
     const [password, onChangePassword] = useState<string>("");
@@ -43,14 +43,21 @@ const Login: React.FC = () => {
             setErrorMessage("Please enter a valid email.");
             setErrors((prevErrors) => ({...prevErrors, email: true}));
         }
-        return !hasErrors();
+        return hasErrors();
+    }
+    
+    function delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     //Process data
-    const login = () => {
+    const processLogin = async () => {
         //LOCALTESTING disabled
-        // if (validate()) { return; }
-        console.log(`LOGIN-API-CALL - ${email} ${password}`);
+        if (validate()) { return; }
+        
+        await login(email, password);
+        await delay(1000); //Temp fix hopefully something better later, isLoading not workng
+
         router.replace('/pantry');
     }
 
@@ -58,23 +65,24 @@ const Login: React.FC = () => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView style={styles.background}>
                 <Image source={require('../assets/DigitalPantryLogo.png')} style={{ height: 356, width: 219, alignSelf: "center", marginTop: '25%' }}></Image>
+                <KeyboardAvoidingView>
                 <TextInput
                     autoComplete="email"
                     style={errors.email ? styles.errorField : styles.textInput}
                     placeholder="Email"
                     onChangeText={onChangeEmail}
                     value={email}
-                    onSubmitEditing={() => passwordField.current?.focus()} />
-                <TextInput
+                    onSubmitEditing={() => passwordField.current?.focus()} /></KeyboardAvoidingView>
+                <KeyboardAvoidingView><TextInput
                     ref={passwordField}
                     autoComplete="current-password"
                     style={errors.password ? styles.errorField : styles.textInput}
                     placeholder="Password"
                     onChangeText={onChangePassword}
                     value={password}
-                    onSubmitEditing={login} />
+                    onSubmitEditing={processLogin} /></KeyboardAvoidingView>
                 {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
-                <Button title="Login" onPress={() => login()} />
+                <Button title="Login" onPress={() => processLogin()} />
                 <Link href='/signup' style={styles.link}>New? Register here.</Link>
             </ScrollView>
         </TouchableWithoutFeedback>

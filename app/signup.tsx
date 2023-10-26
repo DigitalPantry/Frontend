@@ -4,7 +4,7 @@ import { useRouter, Link } from 'expo-router';
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/Button";
 import { User } from "../models/userModels";
-// import { useSession } from "./context/auth";
+import { useSession } from "./context/auth";
 
 interface Errors {
     first: boolean,
@@ -14,7 +14,7 @@ interface Errors {
 }
 
 const Signup: React.FC = () => {
-    // const { login } = useSession();
+    const { register } = useSession();
     const router = useRouter();
     const [first_name, onChangeFirstName] = useState<User["first_name"]>("");
     const [last_name, onChangeLastName] = useState<User["last_name"]>("");
@@ -58,14 +58,21 @@ const Signup: React.FC = () => {
             setErrorMessage("Please enter a valid first name.");
             setErrors((prevErrors) => ({...prevErrors, first: true}));
         }
-        return !hasErrors();
+        return hasErrors();
+    }
+
+    function delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
     
     //Process data
-    const register = () => {
+    const processRegister = async () => {
         //LOCALTESTING disabled
-        // if (validate()) { return; }
-        console.log(`SIGNUP-API-CALL - ${first_name} ${last_name} ${email} ${password}`);
+        if (validate()) { return; }
+
+        await register({ first_name, last_name, email, password });
+        await delay(1000); //Temp fix hopefully something better later, isLoading not workng
+
         router.replace('/pantry');
     };
 
@@ -106,9 +113,9 @@ const Signup: React.FC = () => {
                     placeholder="Password"
                     onChangeText={onChangePassword}
                     value={password}
-                    onSubmitEditing={register} />
+                    onSubmitEditing={processRegister} />
                 {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
-                <Button title="Register" onPress={register} />
+                <Button title="Register" onPress={processRegister} />
                 <Link href='/login' style={styles.link}>Back</Link>
             </SafeAreaView>
         </TouchableWithoutFeedback>
