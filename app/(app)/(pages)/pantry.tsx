@@ -4,6 +4,7 @@ import { Pressable, ScrollView, TextInput, Image, Text, TouchableWithoutFeedback
 import { Stack, useRouter } from 'expo-router';
 import { useState } from "react";
 import SearchBarFilter from "../../../components/searchBar";
+import ListItem from "../../../components/itemExpanded";
 
 const pantry: React.FC = () => {
     const router = useRouter();
@@ -13,6 +14,7 @@ const pantry: React.FC = () => {
             <View style={styles.background}>
                 <SearchBarFilter></SearchBarFilter>
                 <Text>pantry page</Text>
+                <ListItem></ListItem>
             </View>
         </TouchableWithoutFeedback>
     )
