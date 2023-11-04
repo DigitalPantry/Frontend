@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         width: '60%',
         height: 40,
         borderRadius: 20,
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         alignSelf: 'center',
         marginTop: '5%',
         paddingLeft: 10,
@@ -39,10 +39,11 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline'
     },
     line: {
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         height: 1
     },
     headerText: {
+        marginTop: 10,
         fontWeight: 'bold',
         fontSize: 24,
         alignSelf: 'center',
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
         width: '60%',
         height: 40,
         borderRadius: 20,
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         alignSelf: 'center',
         marginTop: '5%',
         paddingLeft: 10,
@@ -69,7 +70,14 @@ const styles = StyleSheet.create({
     popModal: {
         flex: 1,
         backgroundColor: colors.background,
-    }
+    },
+    container: {
+        margin: 10,
+        flex: 1,
+        alignSelf: 'center',
+        width: '70%',
+        backgroundColor: colors.secondary,
+    },
 });
 
 export default styles;

@@ -10,7 +10,8 @@ export default function RootLayout() {
         console.log("display loading screen");
         return <Text>Loading...</Text> //TODO: Replace with loading component
     }
-
+    
+    console.log(session);
     if (!session) {
         console.log("redirect to login screen")
         return <Redirect href='/login' />

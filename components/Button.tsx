@@ -51,7 +51,7 @@ const Button: React.FC<Props> = ({ title, onPress, light, size, buttonStyle, tex
 const localStyles = StyleSheet.create({
     lightButton: {
         borderRadius: 20,
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         alignSelf: 'center',
         justifyContent: 'center',
         shadowColor: 'black',

@@ -64,7 +64,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
 
 const localStyles = StyleSheet.create({
     userRow: {
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         borderRadius: 20,
         padding: 10,
         marginBottom: 10,

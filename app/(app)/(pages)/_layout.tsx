@@ -17,7 +17,7 @@ export default function Layout() {
             marginTop: 20,
             width: 60,
             height: 60,
-            backgroundColor: colors.seconday,
+            backgroundColor: colors.secondary,
             borderRadius: 30
         },
         footerIcon: {
@@ -50,26 +50,32 @@ export default function Layout() {
         }}>
             <Tabs.Screen name='pantry' options={{
                 title: 'Pantry',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/pantry') ? colors.active : colors.seconday }}>
+                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/pantry') ? colors.active : colors.secondary }}>
                     <Image source={require('../../../assets/Pantry.png')} style={layoutStyles.footerIcon} />
                 </View>),
             }} />
             <Tabs.Screen name='recipes' options={{
                 title: 'Recipes',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/recipes') ? colors.active : colors.seconday }}>
+                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/recipes') ? colors.active : colors.secondary }}>
                     <Image source={require('../../../assets/Recipes.png')} style={layoutStyles.footerIcon} />
                 </View>)
             }} />
             <Tabs.Screen name='list' options={{
                 title: 'List',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/list') ? colors.active : colors.seconday }}>
+                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/list') ? colors.active : colors.secondary }}>
                     <Image source={require('../../../assets/List.png')} style={layoutStyles.footerIcon} />
                 </View>)
             }} />
             <Tabs.Screen name='profile' options={{
                 title: 'Profile',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/profile') ? colors.active : colors.seconday }}>
+                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/profile') ? colors.active : colors.secondary }}>
                     <Image source={require('../../../assets/ProfilePic.png')} style={layoutStyles.footerIcon} />
+                </View>)
+            }} />
+            <Tabs.Screen name='newItem' options={{
+                title: 'New Item',
+                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/newItem') ? colors.active : colors.secondary }}>
+                    <Image source={require('../../../assets/diet.png')} style={layoutStyles.footerIcon} />
                 </View>)
             }} />
         </Tabs>
