@@ -95,7 +95,7 @@ const itemStyle = StyleSheet.create({
     buttons: {
         width: 130,
         height: 35,
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         borderRadius: 25,
         marginLeft: 20,
         marginRight: 20,
@@ -104,7 +104,7 @@ const itemStyle = StyleSheet.create({
     quantity: {
         width: 40,
         height: 70,
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         borderRadius: 30,
         alignItems: 'center',
         display: 'flex',

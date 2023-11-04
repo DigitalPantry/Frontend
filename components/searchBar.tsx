@@ -81,7 +81,7 @@ const SearchBarFilter: React.FC = () => {
 
 const pantryStyles = StyleSheet.create({
     search: {
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         borderRadius: 20,
         padding: 10,
         marginTop: 10,
@@ -96,7 +96,7 @@ const pantryStyles = StyleSheet.create({
     modalStyle: {
         width: '80%',
         height: '55%',
-        backgroundColor: colors.seconday,
+        backgroundColor: colors.secondary,
         padding: 20,
         borderRadius: 10,
         elevation: 5,

@@ -53,7 +53,7 @@ const Login: React.FC = () => {
     //Process data
     const processLogin = async () => {
         //LOCALTESTING disabled
-        if (validate()) { return; }
+        if (!validate()) { return; }
         
         await login(email, password);
         await delay(1000); //Temp fix hopefully something better later, isLoading not workng
