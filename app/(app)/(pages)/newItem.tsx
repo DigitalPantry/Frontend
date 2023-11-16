@@ -7,7 +7,7 @@ import colors from "../../../global/colors";
 import { Item, ItemResponse } from "../../../models/itemModels";
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
-import { CreateItem } from '../../../services/itemService';
+import { UpsertItem } from '../../../services/itemService';
 import { useSession } from "../../context/auth";
 
 interface Errors {
@@ -72,7 +72,7 @@ export default function FormPage() {
       household_id: user.household_id
     }
     
-    const res = await CreateItem(item)
+    const res = await UpsertItem(item)
     
     router.replace("/pantry");
   };
