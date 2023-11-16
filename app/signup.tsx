@@ -58,7 +58,7 @@ const Signup: React.FC = () => {
             setErrorMessage("Please enter a valid first name.");
             setErrors((prevErrors) => ({...prevErrors, first: true}));
         }
-        return hasErrors();
+        return !hasErrors();
     }
 
     function delay(ms: number) {
@@ -68,7 +68,7 @@ const Signup: React.FC = () => {
     //Process data
     const processRegister = async () => {
         //LOCALTESTING disabled
-        if (validate()) { return; }
+        if (!validate()) { return; }
 
         await register({ first_name, last_name, email, password });
         await delay(1000); //Temp fix hopefully something better later, isLoading not workng

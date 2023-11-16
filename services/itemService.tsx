@@ -1,15 +1,10 @@
 import { Item, ItemResponse } from '../models/itemModels';
 import apiClient from './apiClient';
 
-export const CreateItem = async (item: Item) => {
+const UpsertItem = async (item: Item) => {
     try {
         const body = {
-            "name": item.name,
-            "category": item.category,
-            "expiration": item.expiration,
-            "quantity": item.quantity,
-            "household_id": item.household_id,
-            "found_in": item.found_in
+            ...item
         }
 
         const response = await apiClient.post(`/items`, body);
@@ -20,3 +15,15 @@ export const CreateItem = async (item: Item) => {
         throw error
     }
 }
+
+const GetItemsByHousehold = async (household_id: number) => {
+    try {
+        const response = await apiClient.get(`/items?household_id=${household_id}`);
+
+        return response.data
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { UpsertItem, GetItemsByHousehold }

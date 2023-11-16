@@ -61,13 +61,13 @@ const profileInfo: React.FC<Props> = ({ user }) => {
         if (!first_name || first_name.length > 100) {
             setErrors((prevErrors) => ({ ...prevErrors, first: true }));
         }
-        return hasErrors();
+        return !hasErrors();
     }
 
     //Process data
     const saveUser = async () => {
         //LOCALTESTING disabled
-        if (validate()) { return; }
+        if (!validate()) { return; }
         await updateUser({ id: user.id, first_name, last_name, email, password })
         await login(email || "", password || "");
         setEdit(false);

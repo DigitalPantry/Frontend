@@ -43,7 +43,7 @@ const Login: React.FC = () => {
             setErrorMessage("Please enter a valid email.");
             setErrors((prevErrors) => ({...prevErrors, email: true}));
         }
-        return hasErrors();
+        return !hasErrors();
     }
     
     function delay(ms: number) {
@@ -54,7 +54,6 @@ const Login: React.FC = () => {
     const processLogin = async () => {
         //LOCALTESTING disabled
         if (!validate()) { return; }
-        
         await login(email, password);
         await delay(1000); //Temp fix hopefully something better later, isLoading not workng
 

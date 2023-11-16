@@ -4,25 +4,40 @@ import styles from "../global/styles";
 import { SafeAreaView, StyleSheet, TouchableOpacity, Text, View, TextInput, Button, Pressable } from "react-native";
 import { useState } from "react";
 import { Divider } from "react-native-elements";
+import { Item } from "../models/itemModels";
+import { UpsertItem } from "../services/itemService";
 
-const ListItem: React.FC = () => {
+interface ListItemProps {
+    item: Item;
+}
+
+const ListItem: React.FC<ListItemProps> = ({item}) => {
 
     const [toggleItem, setToggleItem] = useState(false)
-    const [quantity, setQuantity] = useState(0)
-    const [date, setDate] = useState('')
+    const [quantity, setQuantity] = useState(item.quantity)
+    const [date, setDate] = useState(item.expiration)
 
-    const handleToggleItem = () => setToggleItem(() => !toggleItem);
-
+    const handleToggleItem = () => {
+        setQuantity(item.quantity);
+        setToggleItem(() => !toggleItem);
+    };
+    const handleSaveItem = () => {
+        item.expiration = date;
+        item.quantity = quantity;
+        UpsertItem(item);
+        handleToggleItem();
+    }
+    
     return (
         <SafeAreaView>
             <TouchableOpacity style={toggleItem ? itemStyle.itemExpanded : itemStyle.itemNonExpand} onPress={handleToggleItem}>
                 {!toggleItem && 
                     <>
                         <View style={{ display: 'flex', flexDirection: 'column' }}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Name of Food</Text>
-                            <Text>{!date ? "mm/dd/yyy" : date}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{item.name}</Text>
+                            <Text>{!item.expiration ? "mm/dd/yyy" : item.expiration}</Text>
                         </View>
-                        <Text style={{ alignSelf: 'center' }}>Quantity: {quantity}</Text>
+                        <Text style={{ alignSelf: 'center' }}>Quantity: {item.quantity}</Text>
                     </>
                 }
                 {toggleItem && 
@@ -33,7 +48,7 @@ const ListItem: React.FC = () => {
                                 <Text style={{fontSize: 14, alignSelf: 'center', marginTop: 8}}>Edit Expiration Date: </Text>
                                 <TextInput 
                                     style={{fontSize: 14, alignSelf: 'center', marginTop: 8}}
-                                    value={date}
+                                    value={item.expiration}
                                     placeholder="mm/dd/yyyy"
                                     onChangeText={text => setDate(text)}
                                     />
@@ -42,20 +57,20 @@ const ListItem: React.FC = () => {
                             <View style={{display: 'flex', flexDirection: 'row', alignSelf: 'center', marginTop: 15}}>
                                 <Text style={{ alignSelf: 'center', fontSize: 20 }}>Edit Quantity: {quantity}</Text>
                                 <View style={itemStyle.quantity}>
-                                    <Pressable style={itemStyle.pressables} onPress={() => setQuantity(quantity + 1)}>
+                                    <Pressable style={itemStyle.pressables} onPress={() => setQuantity(+quantity + 1)}>
                                         <Text style={{alignSelf: 'center'}}>+</Text>
                                     </Pressable>
-                                    <Pressable style={itemStyle.pressables} onPress={() => setQuantity(quantity > 0 ? quantity - 1 : quantity)}>
+                                    <Pressable style={itemStyle.pressables} onPress={() => setQuantity( quantity > 0 ? quantity - 1 : quantity)}>
                                         <Text style={{alignSelf: 'center', marginTop: 6}}>-</Text>
                                     </Pressable>
                                 </View>
                             </View> 
 
                             <View style={{display: 'flex', flexDirection: 'row'}}>
-                                <Pressable style={itemStyle.buttons} onPress={handleToggleItem}>
+                                <Pressable style={itemStyle.buttons} onPress={ handleSaveItem }>
                                     <Text style={{alignSelf: 'center', marginTop: 7}}>Save</Text>
                                 </Pressable>
-                                <Pressable style={itemStyle.buttons} onPress={handleToggleItem}>
+                                <Pressable style={itemStyle.buttons} onPress={ handleToggleItem }>
                                     <Text style={{alignSelf: 'center', marginTop: 7}}>Cancel</Text>
                                 </Pressable>
                             </View>
