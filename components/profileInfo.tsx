@@ -31,6 +31,7 @@ const profileInfo: React.FC<Props> = ({ user }) => {
 
     //Enables profile editing
     const handleEdit = () => {
+        clearErrors();
         setEdit(!edit);
     }
 

@@ -16,6 +16,16 @@ const UpsertItem = async (item: Item) => {
     }
 }
 
+const RemoveItem = async (id: number) => {
+    try {
+        const response = await apiClient.delete(`/items?idString=${id}`);
+
+        return response.data
+    } catch (error) {
+        throw error;
+    }
+}
+
 const GetItemsByHousehold = async (household_id: number, found_in: string) => {
     try {
         const response = await apiClient.get(`/items?household_id=${household_id}&found_in=${found_in}`);
@@ -26,4 +36,4 @@ const GetItemsByHousehold = async (household_id: number, found_in: string) => {
     }
 }
 
-export { UpsertItem, GetItemsByHousehold }
+export { UpsertItem, GetItemsByHousehold, RemoveItem }

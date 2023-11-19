@@ -1,5 +1,5 @@
 import styles from "../global/styles";
-import { ScrollView, TextInput, Image, Text, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { ScrollView, TextInput, Image, Text, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from "react-native";
 import { useRouter, Link } from 'expo-router';
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/Button";
