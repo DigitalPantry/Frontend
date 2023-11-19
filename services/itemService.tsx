@@ -16,9 +16,9 @@ const UpsertItem = async (item: Item) => {
     }
 }
 
-const GetItemsByHousehold = async (household_id: number) => {
+const GetItemsByHousehold = async (household_id: number, found_in: string) => {
     try {
-        const response = await apiClient.get(`/items?household_id=${household_id}`);
+        const response = await apiClient.get(`/items?household_id=${household_id}&found_in=${found_in}`);
 
         return response.data
     } catch (error) {
