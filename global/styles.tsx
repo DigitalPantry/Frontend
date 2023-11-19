@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import colors from './colors';
+import { I18nManager } from 'react-native';
 
 const styles = StyleSheet.create({
     background: {
@@ -79,6 +80,16 @@ const styles = StyleSheet.create({
         width: '70%',
         backgroundColor: colors.secondary,
     },
+    swipeableRightButton: {
+        alignItems: 'center',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
+    swipeableRightIcon: {
+        width: 30,
+        marginHorizontal: 10
+    }
 });
 
 export default styles;

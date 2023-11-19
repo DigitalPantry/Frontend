@@ -80,12 +80,3 @@ const localStyles = StyleSheet.create({
 });
 
 export default HouseholdInfo;
-
-//FUTURE USE ON DIFF PAGE
-{/* <Modal animationType="slide" visible={showAddMember} presentationStyle="formSheet" onRequestClose={() => setAddMember(false)}>
-<View style={styles.popModal}>
-    <View style={styles.modal}>
-
-    </View>
-</View>
-</Modal> */}
