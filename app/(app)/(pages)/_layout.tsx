@@ -72,12 +72,6 @@ export default function Layout() {
                     <Image source={require('../../../assets/ProfilePic.png')} style={layoutStyles.footerIcon} />
                 </View>)
             }} />
-            <Tabs.Screen name='newItem' options={{
-                title: 'New Item',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/newItem') ? colors.active : colors.secondary }}>
-                    <Image source={require('../../../assets/diet.png')} style={layoutStyles.footerIcon} />
-                </View>)
-            }} />
         </Tabs>
     );
 };

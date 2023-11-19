@@ -1,50 +1,79 @@
 import styles from "../../../global/styles";
 import colors from "../../../global/colors";
-import { Pressable, ScrollView, TextInput, Image, Text, TouchableWithoutFeedback, Keyboard, View } from "react-native";
-import { Stack, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { TouchableWithoutFeedback, Keyboard, View, Modal, ScrollView, RefreshControl } from "react-native";
+import { useEffect, useState, useCallback } from 'react';
 import SearchBarFilter from "../../../components/searchBar";
-import ListItem from "../../../components/itemExpanded";
+import ItemListView from "../../../components/itemListView";
 import { FAB } from 'react-native-elements';
 import { useSession } from "../../context/auth";
 import { GetItemsByHousehold } from "../../../services/itemService";
 import { Item, ItemResponse } from "../../../models/itemModels";
+import NewItem from "../../../components/newItem";
+import { UpsertItem } from '../../../services/itemService';
+import { itemFoundIn } from "../../../global/constants";
 
 const pantry: React.FC = () => {
-    const router = useRouter();
-    
-    const { user } = useSession();
-    const [ items, setItems ]= useState<Item[]>([]);
-    
-    useEffect(() => {
-        async function getItems() {
-          try {
-            const responseData: ItemResponse = await GetItemsByHousehold(user.household_id || -1);
-            if (responseData.items) {
-              // Update the state with the retrieved items
-              setItems(responseData.items);
-            }
-          } catch (error) {
-            throw error;
-          }
-        }
+  const { user } = useSession();
+  const [items, setItems] = useState<Item[]>([]);
+  const [showAddMember, setShowAddMember] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-        getItems();
-      }, [user]);
-    
-    return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.background}>
-                <SearchBarFilter></SearchBarFilter>
-                {
-                    items.map((item) => {
-                        return <ListItem key={item.id} item={item}/>
-                    })
-                }
-                <FAB title="+" color={colors.active} style={{position: 'absolute', bottom: 10, right: 10}} onPress={() => router.replace("/newItem")} />
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      refreshItems();
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    refreshItems();
+  }, [user]);
+
+  const refreshItems = async () => {
+    try {
+      const responseData: ItemResponse = await GetItemsByHousehold(user.household_id || -1, itemFoundIn.INVENTORY);
+      if (responseData.items) {
+        // Update the state with the retrieved items
+        setItems(responseData.items);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  const addPantryItem = async (item: Item) => {
+    item.household_id = user.household_id;
+    await UpsertItem(item)
+    refreshItems();
+  }
+
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.background}>
+        <SearchBarFilter />
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {items.map((item) => {
+            return <ItemListView key={item.id} item={item} />
+          })}
+          <Modal animationType="slide" visible={showAddMember} presentationStyle="formSheet" onRequestClose={() => setShowAddMember(false)}>
+            <View style={styles.popModal}>
+              <NewItem
+                close={() => setShowAddMember(false)}
+                submitItem={(item: Item) => addPantryItem(item)}
+                itemType={itemFoundIn.INVENTORY}
+              />
             </View>
-        </TouchableWithoutFeedback>
-    )
+          </Modal>
+        </ScrollView>
+        <FAB title="+" color={colors.active} style={{ position: 'absolute', bottom: 15, right: 15 }} onPress={() => setShowAddMember(true)} />
+      </View>
+    </TouchableWithoutFeedback>
+  )
 }
 
 export default pantry;

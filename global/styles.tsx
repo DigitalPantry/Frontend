@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowRadius: 1,
         shadowOpacity: .5,
-        shadowOffset: {width: 0, height: 1}
+        shadowOffset: {width: 0, height: 1},
     },
     link: {
         alignSelf: 'center',
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     popModal: {
         flex: 1,
         backgroundColor: colors.background,
+        paddingTop: '5%',
     },
     container: {
         margin: 10,

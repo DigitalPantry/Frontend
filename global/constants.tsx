@@ -1,9 +1,6 @@
-const example1 = {
-    example1: 'example1',
+const itemFoundIn = {
+    INVENTORY: 'Inventory',
+    LIST: 'List',
 }
 
-const example2 = {
-    example2: 'example2',
-}
-
-export { example1, example2 }
+export { itemFoundIn }
