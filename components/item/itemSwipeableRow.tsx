@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Animated } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import styles from '../global/styles';
+import styles from '../../global/styles';
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 interface Props {

@@ -1,27 +1,32 @@
 import styles from "../../../global/styles";
 import colors from "../../../global/colors";
 import { TouchableWithoutFeedback, Keyboard, View, Modal, Text, RefreshControl } from "react-native";
-import { useEffect, useState, useCallback } from 'react';
-import SearchBarFilter from "../../../components/searchBar";
-import ItemListView from "../../../components/itemListView";
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
+import SearchBarFilter from "../../../components/item/searchBar";
+import ItemListView from "../../../components/item/itemListView";
 import { FAB } from 'react-native-elements';
 import { useSession } from "../../context/auth";
 import { GetItemsByHousehold, RemoveItem } from "../../../services/itemService";
 import { Item, ItemResponse } from "../../../models/itemModels";
-import NewItem from "../../../components/newItem";
+import NewItem from "../../../components/item/newItem";
 import { UpsertItem } from '../../../services/itemService';
 import { itemFoundIn } from "../../../global/constants";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FlatList } from "react-native-gesture-handler";
-import ItemSwipeableRow from "../../../components/itemSwipeableRow";
+import ItemSwipeableRow from "../../../components/item/itemSwipeableRow";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import EmptyList from "../../../components/emptyList";
+import EmptyList from "../../../components/global/emptyList";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import ItemExpanded from "../../../components/item/itemExpanded";
 
 const list: React.FC = () => {
     const { user } = useSession();
     const [items, setItems] = useState<Item[]>([]);
-    const [showAddMember, setShowAddMember] = useState(false);
+    const [showAddItem, setShowAddItem] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [editItem, setEditItem] = useState(null);
+    const itemExpandedRef = useRef<BottomSheetModal>(null);
+    const addItemRef = useRef<BottomSheetModal>(null);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -63,9 +68,30 @@ const list: React.FC = () => {
 
     const SwipeableRow = ({ item, index }: { item: Item; index: number }) => {
         return <ItemSwipeableRow deleteItem={() => removeListItem(item.id || -1)}>
-            <ItemListView key={index} item={item} />
+            <ItemListView key={index} item={item} expandItem={displayExpandItem} />
         </ItemSwipeableRow>
     }
+
+    const displayExpandItem = async (item: any) => {
+        await setEditItem(item);
+        handlePresentExpandModal();
+    }
+
+    const displayAddItem = async (state: boolean) => {
+        await setShowAddItem(state);
+        handlePresentAddModal();
+    }
+
+    const handlePresentExpandModal = useCallback(() => {
+        itemExpandedRef.current?.present();
+    }, []);
+
+    const handlePresentAddModal = useCallback(() => {
+        addItemRef.current?.present();
+    }, []);
+
+    const expandItemSnapPoints = useMemo(() => ['45%'], []);
+    const addItemSnapPoints = useMemo(() => ['45%'], []);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -82,16 +108,36 @@ const list: React.FC = () => {
                     )}
                     ListEmptyComponent={<EmptyList />}
                 />
-                <Modal animationType="slide" visible={showAddMember} presentationStyle="formSheet" onRequestClose={() => setShowAddMember(false)}>
-                    <View style={styles.popModal}>
-                        <NewItem
-                            close={() => setShowAddMember(false)}
-                            submitItem={(item: Item) => addListItem(item)}
-                            itemType={itemFoundIn.LIST}
-                        />
-                    </View>
-                </Modal>
-                <FAB title={<Ionicons size={30} color='black' name="add-outline"/>} color={colors.active} style={{ position: 'absolute', bottom: 15, right: 15 }} onPress={() => setShowAddMember(true)} />
+                <FAB title={<Ionicons size={30} color='black' name="add-outline" />} color={colors.active} style={{ position: 'absolute', bottom: 15, right: 15 }} onPress={() => displayAddItem(true)} />
+                {showAddItem && <BottomSheetModal
+                    ref={addItemRef}
+                    index={0}
+                    snapPoints={addItemSnapPoints}
+                    enablePanDownToClose
+                    backgroundStyle={styles.popModalHalf}
+                    onDismiss={() => displayAddItem(false)}
+                >
+                    <NewItem
+                        close={() => displayAddItem(false)}
+                        submitItem={(item: Item) => addListItem(item)}
+                        itemType={itemFoundIn.LIST}
+                    />
+                </BottomSheetModal>}
+                {editItem && <BottomSheetModal
+                    ref={itemExpandedRef}
+                    index={0}
+                    snapPoints={expandItemSnapPoints}
+                    enablePanDownToClose
+                    backgroundStyle={styles.popModalHalf}
+                    onDismiss={() => setEditItem(null)}
+                >
+                    <ItemExpanded
+                        close={() => setEditItem(null)}
+                        submitItem={UpsertItem}
+                        item={editItem}
+                        itemType={itemFoundIn.LIST}
+                    />
+                </BottomSheetModal>}
             </View>
         </TouchableWithoutFeedback>
     )

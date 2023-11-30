@@ -1,9 +1,9 @@
-import colors from "../global/colors";
+import colors from "../../global/colors";
 import { Text, View, Image, StyleSheet, TextInput } from "react-native";
-import { User } from "../models/userModels";
-import { Household } from "../models/householdModels";
-import styles from "../global/styles";
-import Button from "./Button";
+import { User } from "../../models/userModels";
+import { Household } from "../../models/householdModels";
+import styles from "../../global/styles";
+import Button from "../global/Button";
 import { useState } from "react";
 
 interface Props {
@@ -43,7 +43,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
 
     return (
         <View style={styles.modal}>
-            <Image source={require('../assets/HouseIcon.png')} style={styles.modalIcon} />
+            <Image source={require('../../assets/HouseIcon.png')} style={styles.modalIcon} />
             {household?.users?.map(childUser => householdMemberRow({ user, childUser }))}
             {showAddMember && <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingRight: 9 }}>
                 <TextInput

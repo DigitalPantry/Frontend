@@ -1,8 +1,8 @@
 import styles from "../../../global/styles";
-import { ScrollView, TouchableWithoutFeedback, Keyboard, View } from "react-native";
-import HouseholdInfo from "../../../components/householdInfo";
-import ProfileInfo from "../../../components/profileInfo";
-import Button from "../../../components/Button";
+import { ScrollView, TouchableWithoutFeedback, Keyboard, View, Platform, KeyboardAvoidingView } from "react-native";
+import HouseholdInfo from "../../../components/profile/householdInfo";
+import ProfileInfo from "../../../components/profile/profileInfo";
+import Button from "../../../components/global/Button";
 import { useSession } from "../../context/auth";
 import { useEffect, useState } from 'react';
 import { getHouseholdById } from "../../../services/householdService";
@@ -54,14 +54,18 @@ const profile: React.FC = () => {
     // }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView style={styles.background}>
-                <ProfileInfo user={user} />
-                <HouseholdInfo user={user} household={household} />
-                <Button title="Logout" onPress={logout} />
-                <View style={{marginTop: 20}} />
-            </ScrollView>
-        </TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={90}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <ScrollView style={styles.background}>
+                    <ProfileInfo user={user} />
+                    <HouseholdInfo user={user} household={household} />
+                    <Button title="Logout" onPress={logout} />
+                    <View style={{ marginTop: 20 }} />
+                </ScrollView>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 

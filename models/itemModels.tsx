@@ -2,7 +2,7 @@ interface Item {
     id?: number,
     name: string,
     category: string,
-    expiration: string,
+    expiration?: string,
     quantity: number,
     household_id?: number,
     found_in: string,

@@ -1,6 +1,7 @@
 import { Tabs, usePathname } from 'expo-router';
 import { Image, StyleSheet, View } from 'react-native';
 import colors from '../../../global/colors';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 export default function Layout() {
 
@@ -39,39 +40,41 @@ export default function Layout() {
     };
 
     return (
-        <Tabs screenOptions={{
-            tabBarShowLabel: false,
-            headerStyle: layoutStyles.header,
-            headerTitleStyle: {
-                fontWeight: 'bold',
-                fontSize: 20,
-            },
-            tabBarStyle: layoutStyles.footer,
-        }}>
-            <Tabs.Screen name='pantry' options={{
-                title: 'Pantry',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/pantry') ? colors.active : colors.secondary }}>
-                    <Image source={require('../../../assets/Pantry.png')} style={layoutStyles.footerIcon} />
-                </View>),
-            }} />
-            <Tabs.Screen name='recipes' options={{
-                title: 'Recipes',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/recipes') ? colors.active : colors.secondary }}>
-                    <Image source={require('../../../assets/Recipes.png')} style={layoutStyles.footerIcon} />
-                </View>)
-            }} />
-            <Tabs.Screen name='list' options={{
-                title: 'List',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/list') ? colors.active : colors.secondary }}>
-                    <Image source={require('../../../assets/List.png')} style={layoutStyles.footerIcon} />
-                </View>)
-            }} />
-            <Tabs.Screen name='profile' options={{
-                title: 'Profile',
-                tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/profile') ? colors.active : colors.secondary }}>
-                    <Image source={require('../../../assets/ProfilePic.png')} style={layoutStyles.footerIcon} />
-                </View>)
-            }} />
-        </Tabs>
+        <BottomSheetModalProvider>
+            <Tabs screenOptions={{
+                tabBarShowLabel: false,
+                headerStyle: layoutStyles.header,
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                },
+                tabBarStyle: layoutStyles.footer,
+            }}>
+                <Tabs.Screen name='pantry' options={{
+                    title: 'Pantry',
+                    tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/pantry') ? colors.active : colors.secondary }}>
+                        <Image source={require('../../../assets/Pantry.png')} style={layoutStyles.footerIcon} />
+                    </View>),
+                }} />
+                <Tabs.Screen name='recipes' options={{
+                    title: 'Recipes',
+                    tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/recipes') ? colors.active : colors.secondary }}>
+                        <Image source={require('../../../assets/Recipes.png')} style={layoutStyles.footerIcon} />
+                    </View>)
+                }} />
+                <Tabs.Screen name='list' options={{
+                    title: 'List',
+                    tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/list') ? colors.active : colors.secondary }}>
+                        <Image source={require('../../../assets/List.png')} style={layoutStyles.footerIcon} />
+                    </View>)
+                }} />
+                <Tabs.Screen name='profile' options={{
+                    title: 'Profile',
+                    tabBarIcon: () => (<View style={{ ...layoutStyles.footerButton, backgroundColor: isActive('/profile') ? colors.active : colors.secondary }}>
+                        <Image source={require('../../../assets/ProfilePic.png')} style={layoutStyles.footerIcon} />
+                    </View>)
+                }} />
+            </Tabs>
+        </BottomSheetModalProvider>
     );
 };
