@@ -1,4 +1,4 @@
-import colors from "../global/colors";
+import colors from "../../global/colors";
 import { Pressable, Text, StyleSheet } from "react-native";
 
 interface Props {

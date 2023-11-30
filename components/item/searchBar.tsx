@@ -1,6 +1,6 @@
-import colors from "../global/colors";
+import colors from "../../global/colors";
 import { Text, View, Image, StyleSheet, TextInput, SafeAreaView, TouchableOpacity, Modal } from "react-native";
-import styles from "../global/styles";
+import styles from "../../global/styles";
 import { useState } from "react";
 import { CheckBox } from 'react-native-elements'
 
@@ -32,14 +32,14 @@ const SearchBarFilter: React.FC = () => {
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => console.log('searching')}>
                         <Image 
-                            source={require('../assets/searchIcon.png')} 
+                            source={require('../../assets/searchIcon.png')} 
                             style={styles.modalIcon}
                             
                         />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleModal}>
                         <Image 
-                            source={require('../assets/filter.png')} 
+                            source={require('../../assets/filter.png')} 
                             style={styles.modalIcon}
                             
                         />

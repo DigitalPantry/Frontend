@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import styles from '../global/styles';
+import styles from '../../global/styles';
 
 interface RowProps {
   header: string;

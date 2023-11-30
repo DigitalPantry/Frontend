@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: colors.secondary,
         alignSelf: 'center',
-        marginTop: '5%',
+        marginTop: '2%',
         paddingLeft: 10,
         shadowColor: 'black',
         shadowRadius: 1,
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: colors.secondary,
         alignSelf: 'center',
-        marginTop: '5%',
+        marginTop: '2%',
         paddingLeft: 10,
         borderColor: 'red',
         borderWidth: 1,
@@ -73,12 +73,17 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
         paddingTop: '5%',
     },
+    popModalHalf: {
+        backgroundColor: colors.background,
+        shadowColor: 'black',
+        shadowRadius: 20,
+        shadowOpacity: 10,
+        borderRadius: 10
+    },
     container: {
-        margin: 10,
         flex: 1,
+        alignItems: 'center',
         alignSelf: 'center',
-        width: '70%',
-        backgroundColor: colors.secondary,
     },
     swipeableRightButton: {
         alignItems: 'center',
@@ -89,6 +94,17 @@ const styles = StyleSheet.create({
     swipeableRightIcon: {
         width: 30,
         marginHorizontal: 10
+    },
+    labelText: {
+        marginTop: '2%',
+        fontSize: 18,
+    },
+    inputRow: {
+        paddingTop: '2%',
+        flexDirection: 'row',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     }
 });
 
