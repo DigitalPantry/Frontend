@@ -1,4 +1,7 @@
 ## Setup Instructions:
+- Start the backend app
+- Follow directions in the backend README to set up port forwarding if running on localhost
+- Edit apiClient.js to point to the port forwarded backend url
 - Run the following commands
 ```bash
 npm install
@@ -6,6 +9,9 @@ npm start
 ```
 - Download Expo Go from AppStore.
 - Scan the QR code with mobile device camera. It should redirect to Expo Go app and display client after short loading period.
+
+#### Troubleshooting:
+- VPNs may interfere with the connection to the mobile app. Try turning off any VPNs.
 
 ## Development
 
