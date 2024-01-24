@@ -71,10 +71,11 @@ const Login: React.FC = () => {
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <ScrollView style={styles.background}>
+                <ScrollView style={styles.background} automaticallyAdjustKeyboardInsets={true}>
                     <Image source={require('../assets/DigitalPantryLogo.png')} style={{ height: 356, width: 219, alignSelf: "center", marginTop: '25%' }}></Image>
                     <TextInput
                         autoComplete="email"
+                        autoCapitalize="none"
                         style={errors.email ? styles.errorField : styles.textInput}
                         placeholder="Email"
                         onChangeText={onChangeEmail}
@@ -82,6 +83,7 @@ const Login: React.FC = () => {
                         onSubmitEditing={() => passwordField.current?.focus()} />
                     <TextInput
                         ref={passwordField}
+                        autoCapitalize="none"
                         autoComplete="current-password"
                         style={errors.password ? styles.errorField : styles.textInput}
                         placeholder="Password"
