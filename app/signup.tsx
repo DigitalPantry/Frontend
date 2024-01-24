@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import Button from "../components/global/Button";
 import { User } from "../models/userModels";
 import { useSession } from "./context/auth";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface Errors {
     first: boolean,
@@ -88,7 +89,7 @@ const Signup: React.FC = () => {
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <SafeAreaView style={styles.background}>
+                <ScrollView style={styles.background} automaticallyAdjustKeyboardInsets={true}>
                     <View style={{ height: 218, width: 218, alignSelf: "center", justifyContent: 'center', marginTop: '15%' }}>
                         <Image source={require('../assets/PantryLogoNoText.png')} style={{ alignSelf: 'center', resizeMode: 'contain' }}></Image>
                     </View>
@@ -111,6 +112,7 @@ const Signup: React.FC = () => {
                     <TextInput
                         ref={emailField}
                         autoComplete="email"
+                        autoCapitalize="none"
                         style={errors.email ? styles.errorField : styles.textInput}
                         placeholder="Email"
                         onChangeText={onChangeEmail}
@@ -119,6 +121,7 @@ const Signup: React.FC = () => {
                     <TextInput
                         ref={passwordField}
                         autoComplete="new-password"
+                        autoCapitalize="none"
                         style={errors.password ? styles.errorField : styles.textInput}
                         placeholder="Password"
                         onChangeText={onChangePassword}
@@ -127,7 +130,7 @@ const Signup: React.FC = () => {
                     {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
                     <Button title="Register" onPress={processRegister} />
                     <Link href='/login' style={styles.link}>Back</Link>
-                </SafeAreaView>
+                </ScrollView>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     )

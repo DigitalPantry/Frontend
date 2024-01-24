@@ -1,10 +1,11 @@
 import colors from "../../global/colors";
 import { Text, View, Image, StyleSheet, TextInput } from "react-native";
-import { User } from "../../models/userModels";
+import { LoginResponse, RegisterResponse, User } from "../../models/userModels";
 import { Household } from "../../models/householdModels";
 import styles from "../../global/styles";
 import Button from "../global/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addNewHHMember, getHouseholdById, removeHHMember } from "../../services/householdService";
 
 interface Props {
     user: User,
@@ -19,13 +20,47 @@ interface rowProps {
 const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
     const [showAddMember, setAddMember] = useState<boolean>(false);
     const [memberEmail, setMemberEmail] = useState<string>("");
+    const [houseMembers, setHouseMembers] = useState(household.users)
+    
+    useEffect(() => {
+        household.users?.filter(() => user.id)
+        if (houseMembers === undefined) {
+            setHouseMembers(household.users)
+        }
+    })
 
-    const removeMember = (id: number) => {
-        console.log(`REMOVE-MEMBER ${id}`);
+    useEffect(() => {
+        async function getMembers() {
+            const members = await getHouseholdById(user.id || -1);
+            household.users = members.users
+        }
+        getMembers();
+    }, [household.users])
+
+    const removeMember = async (id: number) => {
+        try {
+            let response = await removeHHMember(id, household.id || -1);
+            if (response.success) {
+                setHouseMembers(response.updatedUsers)
+            }
+            
+            return { success: true, message: "User removed from household."}
+        } catch (error) {
+            return { success: false, message: 'An error occured removing user' }
+        }
     };
+    
+    const addMember = async (): Promise<RegisterResponse> => {
+        try {   
+            let response = await addNewHHMember({first_name: "temp", last_name: "user", email: memberEmail, password: "temp123", household_id: household.id}) 
+            houseMembers?.push(response.user)
+            setAddMember(false);
+            setMemberEmail("");
 
-    const addMember = () => {
-        console.log(`ADD-MEMBER ${memberEmail}`);
+            return { success: true, message: "User added to household."}
+        } catch(error) {
+            return { success: false, message: 'An error occured during calling addMember.' }
+        }
     };
     
     const householdMemberRow: React.FC<rowProps> = ({ user, childUser }) => {
@@ -44,11 +79,12 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
     return (
         <View style={styles.modal}>
             <Image source={require('../../assets/HouseIcon.png')} style={styles.modalIcon} />
-            {household?.users?.map(childUser => householdMemberRow({ user, childUser }))}
+            {houseMembers?.map(childUser => householdMemberRow({ user, childUser }))}
             {showAddMember && <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingRight: 9 }}>
                 <TextInput
                     style={[styles.textInput, localStyles.userInput]}
                     placeholder="User's Email"
+                    autoCapitalize="none"
                     onChangeText={setMemberEmail}
                     value={memberEmail} />
                 <Button

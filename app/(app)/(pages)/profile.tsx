@@ -13,7 +13,7 @@ const profile: React.FC = () => {
 
     useEffect(() => {
         async function getMembers() {
-            const members = await getHouseholdById(user.id || -1);
+            const members = await getHouseholdById(user.household_id || -1);
             setHousehold(members);
             console.log("MEMBERS")
             console.log(members);
