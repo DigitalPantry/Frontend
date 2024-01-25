@@ -6,12 +6,14 @@ import Button from '../global/Button';
 import { itemFoundIn } from '../../global/constants';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import { useSession } from "../../app/context/auth"
 
 interface Errors {
     name: boolean,
     category: boolean,
     expiration: boolean,
     quantity: boolean
+    units: false
 }
 
 interface Props {
@@ -21,13 +23,15 @@ interface Props {
 }
 
 const NewItem: React.FC<Props> = ({ close, submitItem, itemType }) => {
+    const { user } = useSession();
     const [name, setName] = useState('');
     const [category, setCategory] = useState('');
     const [expiration, setExpiration] = useState<Date | undefined>(new Date());
     const [quantity, setQuantity] = useState('');
+    const [units, setUnits]= useState('Grams');
 
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [errors, setErrors] = useState<Errors>({ name: false, category: false, expiration: false, quantity: false });
+    const [errors, setErrors] = useState<Errors>({ name: false, category: false, expiration: false, quantity: false, units: false });
 
     const validate = () => {
         let foundErrors = false;
@@ -60,10 +64,11 @@ const NewItem: React.FC<Props> = ({ close, submitItem, itemType }) => {
         const item: Item = {
             name: name,
             category: category,
+            units: units,
             expiration: expiration?.toDateString(),
             quantity: +quantity,
             found_in: "Inventory",
-            household_id: -1,
+            household_id: user.household_id,
         }
 
         submitItem(item);
@@ -78,7 +83,7 @@ const NewItem: React.FC<Props> = ({ close, submitItem, itemType }) => {
 
     const clearErrors = () => {
         setErrorMessage("");
-        setErrors({ name: false, category: false, expiration: false, quantity: false });
+        setErrors({ name: false, category: false, expiration: false, quantity: false, units: false });
     };
 
     return (
@@ -108,10 +113,19 @@ const NewItem: React.FC<Props> = ({ close, submitItem, itemType }) => {
                         <Text style={styles.labelText}>Quantity:</Text>
                         <BottomSheetTextInput
                             keyboardType='numeric'
-                            style={errors.expiration ? styles.errorField : styles.textInput}
+                            style={errors.quantity ? styles.errorField : styles.textInput}
                             placeholder="Quantity"
                             onChangeText={setQuantity}
                             value={quantity}
+                            placeholderTextColor={'gray'} />
+                    </View>
+                    <View style={styles.inputRow}>
+                        <Text style={styles.labelText}>Units:</Text>
+                        <BottomSheetTextInput
+                            style={errors.units ? styles.errorField : styles.textInput}
+                            placeholder="Units"
+                            onChangeText={setUnits}
+                            value={units}
                             placeholderTextColor={'gray'} />
                     </View>
                     {itemType == itemFoundIn.INVENTORY && <View style={styles.inputRow}>

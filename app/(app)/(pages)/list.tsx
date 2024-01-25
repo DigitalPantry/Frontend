@@ -133,7 +133,7 @@ const list: React.FC = () => {
                 >
                     <ItemExpanded
                         close={() => setEditItem(null)}
-                        submitItem={UpsertItem}
+                        submitItem={(item:Item) => addListItem(item)}
                         item={editItem}
                         itemType={itemFoundIn.LIST}
                     />

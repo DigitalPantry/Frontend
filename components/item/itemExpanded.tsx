@@ -6,12 +6,14 @@ import Button from '../global/Button';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { itemFoundIn } from '../../global/constants';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import { useSession } from "../../app/context/auth"
 
 interface Errors {
     name: boolean,
     category: boolean,
     expiration: boolean,
     quantity: boolean
+    units: boolean
 }
 
 interface Props {
@@ -22,13 +24,15 @@ interface Props {
 }
 
 const ItemExpanded: React.FC<Props> = ({ close, submitItem, itemType, item }) => {
+    const { user } = useSession(); 
     const [name, setName] = useState(item.name);
     const [category, setCategory] = useState(item.category);
     const [expiration, setExpiration] = useState<Date | undefined>(new Date(item.expiration || new Date()));
     const [quantity, setQuantity] = useState(item.quantity);
+    const [units, setUnits] = useState(item.units);
 
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [errors, setErrors] = useState<Errors>({ name: false, category: false, expiration: false, quantity: false });
+    const [errors, setErrors] = useState<Errors>({ name: false, category: false, expiration: false, quantity: false, units: false });
 
     const validate = () => {
         let foundErrors = false;
@@ -58,16 +62,18 @@ const ItemExpanded: React.FC<Props> = ({ close, submitItem, itemType, item }) =>
         if (!validate())
             return;
 
-        const item: Item = {
+        const updatedItem: Item = {
+            id: item.id,
             name: name,
             category: category,
-            expiration: expiration?.toString() || new Date().toString(),
+            units: units,
+            expiration: expiration?.toDateString() || new Date().toDateString(),
             quantity: +quantity,
             found_in: itemFoundIn.INVENTORY,
-            household_id: -1,
+            household_id: user.household_id,
         }
 
-        submitItem(item);
+        submitItem(updatedItem);
         close();
     };
 
@@ -79,7 +85,7 @@ const ItemExpanded: React.FC<Props> = ({ close, submitItem, itemType, item }) =>
 
     const clearErrors = () => {
         setErrorMessage("");
-        setErrors({ name: false, category: false, expiration: false, quantity: false });
+        setErrors({ name: false, category: false, expiration: false, quantity: false, units: false });
     };
 
     return (
@@ -112,10 +118,19 @@ const ItemExpanded: React.FC<Props> = ({ close, submitItem, itemType, item }) =>
                             <Text style={styles.labelText}>Quantity:</Text>
                             <BottomSheetTextInput
                                 keyboardType='numeric'
-                                style={errors.expiration ? styles.errorField : styles.textInput}
+                                style={errors.quantity ? styles.errorField : styles.textInput}
                                 placeholder="Quantity"
                                 onChangeText={value => setQuantity(Number(value))}
                                 value={quantity.toString()}
+                                placeholderTextColor={'gray'} />
+                        </View>
+                        <View style={styles.inputRow}>
+                            <Text style={styles.labelText}>Units:</Text>
+                            <BottomSheetTextInput
+                                style={errors.units ? styles.errorField : styles.textInput}
+                                placeholder="Units"
+                                onChangeText={setUnits}
+                                value={units}
                                 placeholderTextColor={'gray'} />
                         </View>
                         {itemType == itemFoundIn.INVENTORY && <View style={styles.inputRow}>
