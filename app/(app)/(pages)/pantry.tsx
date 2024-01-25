@@ -18,6 +18,7 @@ import EmptyList from "../../../components/global/emptyList";
 import ItemExpanded from "../../../components/item/itemExpanded";
 import BottomSheet, { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
+
 const pantry: React.FC = () => {
   const { user } = useSession();
   const [items, setItems] = useState<Item[]>([]);
@@ -131,7 +132,7 @@ const pantry: React.FC = () => {
         >
           <ItemExpanded
             close={() => setEditItem(null)}
-            submitItem={UpsertItem}
+            submitItem={(item:Item) => addPantryItem(item)}
             itemType={itemFoundIn.INVENTORY}
             item={editItem}
           />
