@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, SafeAreaView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Keyboard, SafeAreaView, StyleSheet } from 'react-native';
 import styles from "../../global/styles";
 import { Recipe } from "../../models/recipeModels";
 import Button from '../global/Button';
@@ -14,14 +14,13 @@ interface Errors {
 
 interface Props {
     close: Function,
-    submitRecipe: Function,
-    recipe: Recipe,
+    submitRecipe: Function
 }
 
-const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
-    const [name, setName] = useState(recipe.name);
-    const [ingredients, setIngredients] = useState<string[]>(recipe.ingredients);
-    const [directions, setDirections] = useState<string[]>(recipe.directions);
+const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
+    const [name, setName] = useState("");
+    const [ingredients, setIngredients] = useState<string[]>([]);
+    const [directions, setDirections] = useState<string[]>([]);
 
     const [tempIngred, setTempIngred] = useState("");
     const [tempDirect, setTempDirect] = useState("");
@@ -33,7 +32,7 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
         let foundErrors = false;
 
         if (!name || name.length > 100) {
-            setErrorMessage("Please enter a valid item name");
+            setErrorMessage("Please enter a valid recipe name");
             setErrors((prevErrors) => ({ ...prevErrors, name: true }));
             foundErrors = true;
         }
@@ -69,15 +68,14 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
         if (!validate())
             return;
 
-        const updatedRecipe: Recipe = {
-            id: recipe.id,
+        const recipe: Recipe = {
             name: name,
             ingredients: ingredients,
             directions: directions,
             household_id: -1,
         }
 
-        submitRecipe(updatedRecipe);
+        submitRecipe(recipe);
         close();
     };
 
@@ -119,17 +117,14 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
     }
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={100}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <SafeAreaView>
-                    <View style={{ ...styles.background, paddingLeft: '12%', paddingRight: '12%' }}>
-                    <Text style={styles.headerText}>Edit Recipe</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView style={styles.background}>
+                <View style={{ ...styles.background, paddingLeft: '12%', paddingRight: '12%' }}>
+                    <Text style={styles.headerText}>Create Recipe</Text>
                     <View style={{ ...styles.inputRow, flexDirection: 'column' }}>
                         <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Name</Text>
                         <BottomSheetTextInput
-                            style={errors.name ? {...styles.errorField, width: '100%' } : { ...styles.textInput, width: '100%' }}
+                            style={errors.name ? styles.errorField : { ...styles.textInput, width: '100%' }}
                             placeholder="Recipe Name"
                             onChangeText={setName}
                             value={name}
@@ -147,7 +142,7 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
                     ))}
                     <View style={styles.inputRow}>
                         <BottomSheetTextInput
-                            style={errors.ingredients ? { ...styles.errorField, width: '85%' } : { ...styles.textInput, width: '85%' }}
+                            style={errors.ingredients ? styles.errorField : { ...styles.textInput, width: '85%' }}
                             placeholder="Add ingredient"
                             onChangeText={setTempIngred}
                             value={tempIngred}
@@ -169,7 +164,7 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
                     ))}
                     <View style={styles.inputRow}>
                         <BottomSheetTextInput
-                            style={errors.directions ? { ...styles.errorField, width: '85%', minHeight: 100 } : { ...styles.textInput, width: '85%', minHeight: 100 }}
+                            style={errors.directions ? styles.errorField : { ...styles.textInput, width: '85%', minHeight: 100 }}
                             multiline
                             numberOfLines={4}
                             placeholder="Add step"
@@ -181,14 +176,13 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
                             onPress={handleAddDirections}
                             size="small" />
                     </View>
-                        {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
-                        <View style={{ width: '100%', marginTop: '5%', marginBottom: '5%'  }}>
-                            <Button title={"Save Changes"} onPress={handleSubmit} />
-                        </View>
+                    {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
+                    <View style={{ width: '100%', marginTop: '5%', marginBottom: '5%' }}>
+                        <Button title={"Create Recipe"} onPress={handleSubmit} />
                     </View>
-                </SafeAreaView>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+                </View>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -207,4 +201,4 @@ const localStyles = StyleSheet.create({
     }
 });
 
-export default RecipeExpanded;
+export default NewRecipe;
