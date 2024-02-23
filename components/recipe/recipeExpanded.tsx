@@ -29,6 +29,8 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [errors, setErrors] = useState<Errors>({ name: false, ingredients: false, directions: false });
 
+    const [editRecipe, setEditRecipe] = useState<Boolean>(false);
+
     const validate = () => {
         let foundErrors = false;
 
@@ -66,19 +68,23 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
     }
 
     const handleSubmit = async () => {
-        if (!validate())
-            return;
+        if (!editRecipe)
+            setEditRecipe(true);
+        else {
+            if (!validate())
+                return;
 
-        const updatedRecipe: Recipe = {
-            id: recipe.id,
-            name: name,
-            ingredients: ingredients,
-            directions: directions,
-            household_id: -1,
+            const updatedRecipe: Recipe = {
+                id: recipe.id,
+                name: name,
+                ingredients: ingredients,
+                directions: directions,
+                household_id: -1,
+            }
+
+            submitRecipe(updatedRecipe);
+            close();
         }
-
-        submitRecipe(updatedRecipe);
-        close();
     };
 
     //Clear error on field change
@@ -125,65 +131,65 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeAreaView>
                     <View style={{ ...styles.background, paddingLeft: '12%', paddingRight: '12%' }}>
-                    <Text style={styles.headerText}>Edit Recipe</Text>
-                    <View style={{ ...styles.inputRow, flexDirection: 'column' }}>
-                        <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Name</Text>
-                        <BottomSheetTextInput
-                            style={errors.name ? {...styles.errorField, width: '100%' } : { ...styles.textInput, width: '100%' }}
-                            placeholder="Recipe Name"
-                            onChangeText={setName}
-                            value={name}
-                            placeholderTextColor={'gray'} />
-                    </View>
-                    <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Ingredients</Text>
-                    {ingredients?.map((item, index) => (
-                        <View key={index} style={localStyles.itemRow}>
-                            <Text style={{ fontSize: 16 }}>{item}</Text>
+                        <Text style={styles.headerText}>{editRecipe ? "Edit Recipe" : recipe.name || "My Recipe"}</Text>
+                        {editRecipe && <View style={{ ...styles.inputRow, flexDirection: 'column' }}>
+                            <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Name</Text>
+                            <BottomSheetTextInput
+                                style={errors.name ? { ...styles.errorField, width: '100%' } : { ...styles.textInput, width: '100%' }}
+                                placeholder="Recipe Name"
+                                onChangeText={setName}
+                                value={name}
+                                placeholderTextColor={'gray'} />
+                        </View>}
+                        <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Ingredients</Text>
+                        {ingredients?.map((item, index) => (
+                            <View key={index} style={localStyles.itemRow}>
+                                <Text style={{ fontSize: 16 }}>{item}</Text>
+                                {editRecipe && <Button
+                                    title="-"
+                                    onPress={() => handleRemoveIngredients(index)}
+                                    size="small" />}
+                            </View>
+                        ))}
+                        {editRecipe && <View style={styles.inputRow}>
+                            <BottomSheetTextInput
+                                style={errors.ingredients ? { ...styles.errorField, width: '85%' } : { ...styles.textInput, width: '85%' }}
+                                placeholder="Add ingredient"
+                                onChangeText={setTempIngred}
+                                value={tempIngred}
+                                placeholderTextColor={'gray'} />
                             <Button
-                                title="-"
-                                onPress={() => handleRemoveIngredients(index)}
+                                title="+"
+                                onPress={handleAddIngredients}
                                 size="small" />
-                        </View>
-                    ))}
-                    <View style={styles.inputRow}>
-                        <BottomSheetTextInput
-                            style={errors.ingredients ? { ...styles.errorField, width: '85%' } : { ...styles.textInput, width: '85%' }}
-                            placeholder="Add ingredient"
-                            onChangeText={setTempIngred}
-                            value={tempIngred}
-                            placeholderTextColor={'gray'} />
-                        <Button
-                            title="+"
-                            onPress={handleAddIngredients}
-                            size="small" />
-                    </View>
-                    <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Directions</Text>
-                    {directions?.map((item, index) => (
-                        <View key={index} style={localStyles.itemRow}>
-                            <Text style={{ fontSize: 16 }}>{item}</Text>
+                        </View>}
+                        <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Directions</Text>
+                        {directions?.map((item, index) => (
+                            <View key={index} style={localStyles.itemRow}>
+                                <Text style={{ fontSize: 16 }}>{item}</Text>
+                                {editRecipe && <Button
+                                    title="-"
+                                    onPress={() => handleRemoveDirections(index)}
+                                    size="small" />}
+                            </View>
+                        ))}
+                        {editRecipe && <View style={styles.inputRow}>
+                            <BottomSheetTextInput
+                                style={errors.directions ? { ...styles.errorField, width: '85%', minHeight: 100 } : { ...styles.textInput, width: '85%', minHeight: 100 }}
+                                multiline
+                                numberOfLines={4}
+                                placeholder="Add step"
+                                onChangeText={setTempDirect}
+                                value={tempDirect}
+                                placeholderTextColor={'gray'} />
                             <Button
-                                title="-"
-                                onPress={() => handleRemoveDirections(index)}
+                                title="+"
+                                onPress={handleAddDirections}
                                 size="small" />
-                        </View>
-                    ))}
-                    <View style={styles.inputRow}>
-                        <BottomSheetTextInput
-                            style={errors.directions ? { ...styles.errorField, width: '85%', minHeight: 100 } : { ...styles.textInput, width: '85%', minHeight: 100 }}
-                            multiline
-                            numberOfLines={4}
-                            placeholder="Add step"
-                            onChangeText={setTempDirect}
-                            value={tempDirect}
-                            placeholderTextColor={'gray'} />
-                        <Button
-                            title="+"
-                            onPress={handleAddDirections}
-                            size="small" />
-                    </View>
+                        </View>}
                         {errorMessage && <Text style={{ ...styles.errorText, marginTop: '5%' }}>{errorMessage}</Text>}
-                        <View style={{ width: '100%', marginTop: '5%', marginBottom: '5%'  }}>
-                            <Button title={"Save Changes"} onPress={handleSubmit} />
+                        <View style={{ width: '100%', marginTop: '5%', marginBottom: '5%' }}>
+                            <Button title={editRecipe ? "Save Changes" : "Edit Recipe"} onPress={handleSubmit} />
                         </View>
                     </View>
                 </SafeAreaView>
