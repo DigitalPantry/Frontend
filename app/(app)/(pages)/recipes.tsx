@@ -40,7 +40,18 @@ const Recipes: React.FC = () => {
 
     const refreshItems = async () => {
         try {
-            const responseData: RecipeResponse = await GetRecipesByHousehold(user.household_id || -1);
+            // const responseData: RecipeResponse = await GetRecipesByHousehold(user.household_id || -1);
+            const responseData = {
+                recipes: [
+                    {
+                        id: 1,
+                        name: "First recipe",
+                        household_id: 1,
+                        ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
+                        directions: ["Step 1", "Step 2", "Step 3"],
+                    }
+                ]
+            }
             if (responseData.recipes) {
                 // Update the state with the retrieved items
                 setItems(responseData.recipes);
