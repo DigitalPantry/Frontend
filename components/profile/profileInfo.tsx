@@ -75,7 +75,7 @@ const profileInfo: React.FC<Props> = ({ user }) => {
         if (!validate())
             return
 
-        await updateUser({ id: user.id, first_name, last_name, email, password })
+        await updateUser({ id: user.id, first_name, last_name, email, password, house_owner: user.house_owner })
         await login(email || "", password || "");
         setEdit(false);
     };

@@ -20,6 +20,7 @@ interface User {
     last_name: string,
     email?: string,
     password?: string,
+    house_owner: number,
     household_id?: number,
 }
 
