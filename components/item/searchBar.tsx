@@ -1,23 +1,70 @@
 import colors from "../../global/colors";
 import { Text, View, Image, StyleSheet, TextInput, SafeAreaView, TouchableOpacity, Modal } from "react-native";
 import styles from "../../global/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckBox } from 'react-native-elements'
+import { Item } from "../../models/itemModels";
 
-const SearchBarFilter: React.FC = () => {
+interface Props {
+    items: Item[],
+    onSort: (newItems: Item[]) => void
+};
+
+const SearchBarFilter: React.FC<Props> = (items: Props) => {
 
     const [isModalVisible, setModalVisible] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState('')
+    const [itemsCopy, setItemsCopy] = useState<Item[]>(items.items)
+    const [errorMsg, setErrorMsg] = useState<boolean>(false);
     const [filterOptions, setFilterOptions] = useState({
         expirationDate: false,
         quantity: false
     })
+    
+    useEffect(() => {
+        items.onSort(items.items)
+    }, [items.items])
+
+    useEffect(() => {
+        // Trigger the onSort callback with the sorted items
+        items.onSort(itemsCopy);
+    }, [itemsCopy]);
 
     const handleModal = () => setModalVisible(() => !isModalVisible);
-    
+
     const handleSearch = () => {
-        handleModal()
-        console.log('Search API Call');
+        
+        if (filterOptions.expirationDate && filterOptions.quantity) {
+            setErrorMsg(true)
+            return;
+        } 
+
+        if (filterOptions.expirationDate || filterOptions.quantity) {
+            setErrorMsg(false)
+        }
+
+        if (filterOptions.quantity) {
+            const sortedItems = [...items.items].sort((a, b) => b.quantity - a.quantity);
+            setItemsCopy(sortedItems)
+        }
+
+        if (filterOptions.expirationDate) {
+            const itemsWithDateObjects = items.items.map(item => ({
+                ...item,
+                expirationDate: item.expiration ? new Date(item.expiration) : undefined,
+            }));
+            
+            const validItems = itemsWithDateObjects.filter(x => x.expiration)
+
+            const sortedItems = validItems.sort((a, b) => {
+                if (a.expirationDate && b.expirationDate) {
+                    return a.expirationDate.getTime() - b.expirationDate.getTime();
+                }
+                
+                return -1;
+            });
+            setItemsCopy(sortedItems)           
+        }
     }
 
     return (
@@ -66,6 +113,7 @@ const SearchBarFilter: React.FC = () => {
                             />
                         </View>
                         <View style={{display: 'flex', flexDirection: 'column', marginTop: '12%'}}>
+                            {errorMsg && <Text style={styles.errorText}>Only one filter may be checked.</Text>}
                             <TouchableOpacity onPress={handleSearch} style={[styles.textInput, {backgroundColor: colors.primary, justifyContent: 'center'}]}>
                                 <Text style={{textAlign: 'center'}}>Search</Text>
                             </TouchableOpacity>

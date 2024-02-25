@@ -21,6 +21,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
     const [showAddMember, setAddMember] = useState<boolean>(false);
     const [memberEmail, setMemberEmail] = useState<string>("");
     const [houseMembers, setHouseMembers] = useState(household.users)
+    const [houseOwner, setHouseOwner] = useState<User>();
     
     useEffect(() => {
         household.users?.filter(() => user.id)
@@ -33,6 +34,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
         async function getMembers() {
             const members = await getHouseholdById(user.id || -1);
             household.users = members.users
+            setHouseOwner(household.users?.find(user => user.house_owner == 1))
         }
         getMembers();
     }, [household.users])
@@ -52,7 +54,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
     
     const addMember = async (): Promise<RegisterResponse> => {
         try {   
-            let response = await addNewHHMember({first_name: "temp", last_name: "user", email: memberEmail, password: "temp123", household_id: household.id}) 
+            let response = await addNewHHMember({first_name: "temp", last_name: "user", email: memberEmail, password: "temp123", house_owner: 0, household_id: household.id}) 
             houseMembers?.push(response.user)
             setAddMember(false);
             setMemberEmail("");
@@ -68,7 +70,7 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
         return (
             <View key={childUser.id} style={localStyles.userRow}>
                 <Text style={{ fontSize: 16 }}>{childUser.first_name} {childUser.last_name} {me ? "(Me)" : null}</Text>
-                {!me && <Button
+                {!me && houseOwner?.house_owner == 1 && <Button
                     title="x"
                     onPress={() => removeMember(childUser.id || -1)}
                     size={"small"} />}
@@ -93,7 +95,8 @@ const HouseholdInfo: React.FC<Props> = ({ user, household }) => {
                     size={"small"}
                     light={true} />
             </View>}
-            <Button title={showAddMember ? "Cancel" : "+"} onPress={() => setAddMember(!showAddMember)} light={true} />
+            {houseOwner?.house_owner == 1 &&
+                <Button title={showAddMember ? "Cancel" : "+"} onPress={() => setAddMember(!showAddMember)} light={true} />}
         </View>
     );
 };

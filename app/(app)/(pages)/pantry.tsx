@@ -40,6 +40,10 @@ const pantry: React.FC = () => {
     refreshItems();
   }, [user]);
 
+  useEffect(() => {
+
+  }, [items])
+
   const refreshItems = async () => {
     try {
       const responseData: ItemResponse = await GetItemsByHousehold(user.household_id || -1, itemFoundIn.INVENTORY);
@@ -89,13 +93,17 @@ const pantry: React.FC = () => {
     addItemRef.current?.present();
   }, []);
 
+  const handleFilterResults = async (newItems: Item[]) => {
+    await setItems(newItems);
+  }
+
   const expandItemSnapPoints = useMemo(() => ['45%'], []);
   const addItemSnapPoints = useMemo(() => ['45%'], []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.background}>
-        <SearchBarFilter />
+        <SearchBarFilter items={items} onSort={handleFilterResults} />
         <FlatList
           data={items}
           ItemSeparatorComponent={() => <View style={{ padding: 5 }} />}

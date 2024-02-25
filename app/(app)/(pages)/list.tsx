@@ -90,13 +90,17 @@ const list: React.FC = () => {
         addItemRef.current?.present();
     }, []);
 
+    const handleFilterResults = async (newItems: Item[]) => {
+        await setItems(newItems);
+    }
+
     const expandItemSnapPoints = useMemo(() => ['45%'], []);
     const addItemSnapPoints = useMemo(() => ['45%'], []);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.background}>
-                <SearchBarFilter />
+                <SearchBarFilter items={items} onSort={handleFilterResults} />
                 <FlatList
                     data={items}
                     ItemSeparatorComponent={() => <View style={{ padding: 5 }} />}

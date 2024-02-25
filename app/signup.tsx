@@ -79,7 +79,7 @@ const Signup: React.FC = () => {
         if (!validate())
             return
 
-        await register({ first_name, last_name, email, password });
+        await register({ first_name, last_name, email, password, house_owner: 1 });
         await delay(1000); //Temp fix hopefully something better later, isLoading not workng
 
         router.replace('/pantry');

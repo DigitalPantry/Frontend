@@ -38,6 +38,10 @@ const Recipes: React.FC = () => {
         refreshItems();
     }, [user]);
 
+    // const handleFilterResults = async (newItems: Item[]) => {
+    //     await setItems(newItems);
+    // }
+
     const refreshItems = async () => {
         try {
             // const responseData: RecipeResponse = await GetRecipesByHousehold(user.household_id || -1);
@@ -104,7 +108,7 @@ const Recipes: React.FC = () => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.background}>
-                <SearchBarFilter />
+                {/* <SearchBarFilter items={items} onSort={handleFilterResults} /> */}
                 <FlatList
                     data={items}
                     ItemSeparatorComponent={() => <View style={{ padding: 5 }} />}
