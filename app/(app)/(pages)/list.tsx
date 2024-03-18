@@ -1,8 +1,7 @@
 import styles from "../../../global/styles";
 import colors from "../../../global/colors";
-import { TouchableWithoutFeedback, Keyboard, View, Modal, Text, RefreshControl } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, View, RefreshControl } from "react-native";
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import SearchBarFilter from "../../../components/item/searchBar";
 import ItemListView from "../../../components/item/itemListView";
 import { FAB } from 'react-native-elements';
 import { useSession } from "../../context/auth";
@@ -14,10 +13,10 @@ import { itemFoundIn } from "../../../global/constants";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FlatList } from "react-native-gesture-handler";
 import ItemSwipeableRow from "../../../components/item/itemSwipeableRow";
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import EmptyList from "../../../components/global/emptyList";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import ItemExpanded from "../../../components/item/itemExpanded";
+import NewSearchBar from "../../../components/global/newSearchBar";
 
 const list: React.FC = () => {
     const { user } = useSession();
@@ -27,6 +26,13 @@ const list: React.FC = () => {
     const [editItem, setEditItem] = useState(null);
     const itemExpandedRef = useRef<BottomSheetModal>(null);
     const addItemRef = useRef<BottomSheetModal>(null);
+    const [filterObj, setFilterObj] = useState({
+		household_id: user.household_id || -1,
+		found_in: itemFoundIn.LIST,
+		name: null,
+		category: null,
+		minQuantity: null,
+	});
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -42,12 +48,13 @@ const list: React.FC = () => {
 
     const refreshItems = async () => {
         try {
-            const responseData: ItemResponse = await GetItemsByHousehold(user.household_id || -1, itemFoundIn.LIST);
-            if (responseData.items) {
-                // Update the state with the retrieved items
+            setRefreshing(true);
+            const responseData: ItemResponse = await GetItemsByHousehold(filterObj.household_id, filterObj.found_in, filterObj.name, filterObj.category, null, filterObj.minQuantity);
+            if (responseData.items)
                 setItems(responseData.items);
-            }
+            setRefreshing(false);
         } catch (error) {
+            setRefreshing(false);
             throw error;
         }
     }
@@ -90,17 +97,13 @@ const list: React.FC = () => {
         addItemRef.current?.present();
     }, []);
 
-    const handleFilterResults = async (newItems: Item[]) => {
-        await setItems(newItems);
-    }
-
     const expandItemSnapPoints = useMemo(() => ['45%'], []);
     const addItemSnapPoints = useMemo(() => ['45%'], []);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.background}>
-                <SearchBarFilter items={items} onSort={handleFilterResults} />
+            <NewSearchBar showFilters={true} setFilterObject={setFilterObj} filterObject={filterObj} refreshData={refreshItems} />
                 <FlatList
                     data={items}
                     ItemSeparatorComponent={() => <View style={{ padding: 5 }} />}

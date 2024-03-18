@@ -26,9 +26,14 @@ const RemoveRecipe = async (id: number) => {
     }
 }
 
-const GetRecipesByHousehold = async (household_id: number) => {
+const GetRecipesByHousehold = async (household_id: number, name: string | null) => {
     try {
-        const response = await apiClient.get(`/recipes?household_id=${household_id}`);
+        let queryString = `/recipes?household_id=${household_id}`;
+
+        if (name)
+            queryString += `&name=${name}`
+
+        const response = await apiClient.get(queryString);
 
         return response.data
     } catch (error) {
