@@ -16,6 +16,7 @@ import RecipeExpanded from "../../../components/recipe/recipeExpanded";
 import NewRecipe from "../../../components/recipe/newRecipe";
 import RecipeSwipeableRow from "../../../components/recipe/recipeSwipeableRow";
 import RecipeListView from "../../../components/recipe/recipeListView";
+import NewSearchBar from "../../../components/global/newSearchBar";
 
 const Recipes: React.FC = () => {
     const { user } = useSession();
@@ -25,6 +26,10 @@ const Recipes: React.FC = () => {
     const [editItem, setEditItem] = useState(null);
     const itemExpandedRef = useRef<BottomSheetModal>(null);
     const addItemRef = useRef<BottomSheetModal>(null);
+    const [filterObj, setFilterObj] = useState({
+		household_id: user.household_id || -1,
+		name: null,
+	});
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -38,29 +43,17 @@ const Recipes: React.FC = () => {
         refreshItems();
     }, [user]);
 
-    // const handleFilterResults = async (newItems: Item[]) => {
-    //     await setItems(newItems);
-    // }
-
     const refreshItems = async () => {
         try {
-            // const responseData: RecipeResponse = await GetRecipesByHousehold(user.household_id || -1);
-            const responseData = {
-                recipes: [
-                    {
-                        id: 1,
-                        name: "First recipe",
-                        household_id: 1,
-                        ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
-                        directions: ["Step 1", "Step 2", "Step 3"],
-                    }
-                ]
-            }
-            if (responseData.recipes) {
-                // Update the state with the retrieved items
+            setRefreshing(true);
+            const responseData: RecipeResponse = await GetRecipesByHousehold(filterObj.household_id, filterObj.name);
+
+            if (responseData.recipes)
                 setItems(responseData.recipes);
-            }
+
+            setRefreshing(false);
         } catch (error) {
+            setRefreshing(false);
             throw error;
         }
     }
@@ -108,7 +101,7 @@ const Recipes: React.FC = () => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.background}>
-                {/* <SearchBarFilter items={items} onSort={handleFilterResults} /> */}
+                <NewSearchBar showFilters={false} setFilterObject={setFilterObj} filterObject={filterObj} refreshData={refreshItems} />
                 <FlatList
                     data={items}
                     ItemSeparatorComponent={() => <View style={{ padding: 5 }} />}
