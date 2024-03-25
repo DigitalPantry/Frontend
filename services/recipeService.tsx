@@ -6,7 +6,7 @@ const UpsertRecipe = async (recipe: Recipe) => {
         const body = {
             ...recipe
         }
-console.log(body)
+
         const response = await apiClient.post(`/recipes`, body);
 
         return response.data
@@ -41,4 +41,16 @@ const GetRecipesByHousehold = async (household_id: number, name: string | null) 
     }
 }
 
-export { UpsertRecipe, GetRecipesByHousehold, RemoveRecipe }
+const GenerateRecipe = async (household_id: number) => {
+    try {
+        let queryString = `recipes/ai?household_id=${household_id}`
+
+        const response = await apiClient.get(queryString);
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { UpsertRecipe, GetRecipesByHousehold, RemoveRecipe, GenerateRecipe }

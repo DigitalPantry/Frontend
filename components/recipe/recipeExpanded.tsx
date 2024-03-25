@@ -166,7 +166,7 @@ const RecipeExpanded: React.FC<Props> = ({ close, submitRecipe, recipe }) => {
                         <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Directions</Text>
                         {directions?.map((item, index) => (
                             <View key={index} style={localStyles.itemRow}>
-                                <Text style={{ fontSize: 16 }}>{item}</Text>
+                                <Text style={{ fontSize: 16, width: '80%' }}>{item}</Text>
                                 {editRecipe && <Button
                                     title="-"
                                     onPress={() => handleRemoveDirections(index)}
@@ -204,12 +204,10 @@ const localStyles = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         marginTop: 5,
-        height: 50,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        widht: '100%',
-
+        width: '100%',
     }
 });
 

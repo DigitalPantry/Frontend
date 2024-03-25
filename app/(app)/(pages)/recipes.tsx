@@ -7,7 +7,7 @@ import { FAB } from 'react-native-elements';
 import { useSession } from "../../context/auth";
 import { GetRecipesByHousehold } from "../../../services/recipeService";
 import { Recipe, RecipeResponse } from "../../../models/recipeModels";
-import { UpsertRecipe, RemoveRecipe } from '../../../services/recipeService';
+import { UpsertRecipe, RemoveRecipe, GenerateRecipe } from '../../../services/recipeService';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FlatList } from "react-native-gesture-handler";
 import EmptyList from "../../../components/global/emptyList";
@@ -87,6 +87,12 @@ const Recipes: React.FC = () => {
         handlePresentAddModal();
     }
 
+    const generateNewItem = async () => {
+        setRefreshing(true);
+        await GenerateRecipe(filterObj.household_id);
+        refreshItems();
+    }
+
     const handlePresentExpandModal = useCallback(() => {
         itemExpandedRef.current?.present();
     }, []);
@@ -114,6 +120,7 @@ const Recipes: React.FC = () => {
                     ListEmptyComponent={<EmptyList />}
                 />
                 <FAB title={<Ionicons size={30} color='black' name="add-outline" />} color={colors.active} style={{ position: 'absolute', bottom: 15, right: 15 }} onPress={() => displayAddItem(true)} />
+                <FAB title={<Ionicons size={30} color='black' name="flash-outline" />} color={colors.active} style={{ position: 'absolute', bottom: 70, right: 15 }} onPress={generateNewItem} />
                 {showAddItem && <BottomSheetModal
                     ref={addItemRef}
                     index={0}
