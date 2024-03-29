@@ -4,6 +4,8 @@ interface Recipe {
     household_id?: number,
     ingredients: Array<string>,
     directions: Array<string>,
+    serves: string,
+    time: string,
 }
 
 interface RecipeResponse {
