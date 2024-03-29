@@ -14,11 +14,10 @@ const RecipeListView: React.FC<RecipeListViewProps> = ({recipe, expandedRecipe})
             <TouchableOpacity style={recipeStyle.recipeNonExpand} onPress={() => expandedRecipe(recipe)}>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent:'center' }}>
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{recipe.name}</Text>
-                    <Text>DESCRIPTION_HERE</Text>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent:'center' }}>
-                    <Text style={{ alignSelf: 'center' }}>Serves: </Text>
-                    <Text style={{ alignSelf: 'center' }}>Time: </Text>
+                    <Text style={{ alignSelf: 'flex-end' }}>Serves: {recipe.serves}</Text>
+                    <Text style={{ alignSelf: 'flex-end' }}>Time: {recipe.time}</Text>
                 </View>
             </TouchableOpacity>
         </SafeAreaView>

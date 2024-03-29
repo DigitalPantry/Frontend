@@ -9,7 +9,9 @@ import colors from '../../global/colors';
 interface Errors {
     name: boolean,
     ingredients: boolean,
-    directions: boolean
+    directions: boolean,
+    serves: boolean,
+    time: boolean
 }
 
 interface Props {
@@ -19,6 +21,8 @@ interface Props {
 
 const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
     const [name, setName] = useState("");
+    const [serves, setServes] = useState("");
+    const [time, setTime] = useState("");
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [directions, setDirections] = useState<string[]>([]);
 
@@ -26,7 +30,7 @@ const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
     const [tempDirect, setTempDirect] = useState("");
 
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [errors, setErrors] = useState<Errors>({ name: false, ingredients: false, directions: false });
+    const [errors, setErrors] = useState<Errors>({ name: false, ingredients: false, directions: false, serves: false, time: false });
 
     const validate = () => {
         let foundErrors = false;
@@ -34,6 +38,18 @@ const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
         if (!name || name.length > 100) {
             setErrorMessage("Please enter a valid recipe name");
             setErrors((prevErrors) => ({ ...prevErrors, name: true }));
+            foundErrors = true;
+        }
+        
+        if (!time || time.length > 50) {
+            setErrorMessage("Please enter a valid prep time");
+            setErrors((prevErrors) => ({ ...prevErrors, time: true }));
+            foundErrors = true;
+        }
+        
+        if (!serves || serves.length > 50) {
+            setErrorMessage("Please enter a valid serving size");
+            setErrors((prevErrors) => ({ ...prevErrors, serves: true }));
             foundErrors = true;
         }
 
@@ -73,6 +89,8 @@ const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
             ingredients: ingredients,
             directions: directions,
             household_id: -1,
+            serves: serves,
+            time: time
         }
 
         submitRecipe(recipe);
@@ -87,7 +105,7 @@ const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
 
     const clearErrors = () => {
         setErrorMessage("");
-        setErrors({ name: false, ingredients: false, directions: false });
+        setErrors({ name: false, ingredients: false, directions: false, serves: false, time: false });
     };
 
     const handleAddIngredients = () => {
@@ -128,6 +146,24 @@ const NewRecipe: React.FC<Props> = ({ close, submitRecipe }) => {
                             placeholder="Recipe Name"
                             onChangeText={setName}
                             value={name}
+                            placeholderTextColor={'gray'} />
+                    </View>
+                    <View style={{ ...styles.inputRow, flexDirection: 'column' }}>
+                        <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}> Preparation Time</Text>
+                        <BottomSheetTextInput
+                            style={errors.time ? styles.errorField : { ...styles.textInput, width: '100%' }}
+                            placeholder="Prep Time"
+                            onChangeText={setTime}
+                            value={time}
+                            placeholderTextColor={'gray'} />
+                    </View>
+                    <View style={{ ...styles.inputRow, flexDirection: 'column' }}>
+                        <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Servings</Text>
+                        <BottomSheetTextInput
+                            style={errors.serves ? styles.errorField : { ...styles.textInput, width: '100%' }}
+                            placeholder="Servings"
+                            onChangeText={setServes}
+                            value={serves}
                             placeholderTextColor={'gray'} />
                     </View>
                     <Text style={{ ...styles.labelText, alignSelf: 'center', paddingTop: '2%' }}>Ingredients</Text>

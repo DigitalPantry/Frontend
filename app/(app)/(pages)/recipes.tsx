@@ -48,8 +48,10 @@ const Recipes: React.FC = () => {
             setRefreshing(true);
             const responseData: RecipeResponse = await GetRecipesByHousehold(filterObj.household_id, filterObj.name);
 
-            if (responseData.recipes)
+            if (responseData.recipes) {
                 setItems(responseData.recipes);
+            }
+                
 
             setRefreshing(false);
         } catch (error) {
