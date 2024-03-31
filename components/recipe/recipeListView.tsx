@@ -12,7 +12,7 @@ const RecipeListView: React.FC<RecipeListViewProps> = ({recipe, expandedRecipe})
     return (
         <SafeAreaView>
             <TouchableOpacity style={recipeStyle.recipeNonExpand} onPress={() => expandedRecipe(recipe)}>
-                <View style={{ display: 'flex', flexDirection: 'column', justifyContent:'center' }}>
+                <View style={{ display: 'flex', flexDirection: 'column', justifyContent:'center', width: '50%' }}>
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{recipe.name}</Text>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent:'center' }}>
